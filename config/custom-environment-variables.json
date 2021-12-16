@@ -38,5 +38,38 @@
         }
       }
     }
+  },
+  "splitAttempts": {
+    "__name": "SPLIT_ATTEMPTS",
+    "__format": "number"
+  },
+  "tiles": {
+    "path": "TILES_PATH",
+    "format": "TILES_FORMAT"
+  },
+  "queue": {
+    "jobManagerBaseUrl": "QUEUE_JOB_MANAGER_BASE_URL",
+    "heartbeatManagerBaseUrl": "QUEUE_HEART_BEAT_MANAGER_BASE_URL",
+    "dequeueIntervalMs": {
+      "__name": "QUEUE_DEQUEUE_INTERVAL_MS",
+      "__format": "number"
+    },
+    "heartbeatIntervalMs": {
+      "__name": "QUEUE_HEART_BEAT_INTERVAL_MS",
+      "__format": "number"
+    },
+    "jobType": "QUEUE_JOB_TYPE",
+    "tilesTaskType": "QUEUE_TILES_TASK_TYPE"
+  },
+  "storageProvider": "STORAGE_PROVIDER",
+  "S3": {
+    "accessKeyId": "S3_ACCESS_KEY_ID",
+    "secretAccessKey": "S3_SECRET_ACCESS_KEY",
+    "endpoint": "S3_ENDPOINT",
+    "bucket": "S3_BUCKET",
+    "forcePathStyle": {
+      "__name": "S3_FORCE_PATH_STYLE",
+      "__format": "boolean"
+    }
   }
 }

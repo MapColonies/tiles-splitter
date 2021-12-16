@@ -1,8 +1,8 @@
 {{- $releaseName := .Release.Name -}}
-{{- $chartName := include "ts-server-boilerplate.name" . -}}
-{{- $cloudProviderFlavor := include "ts-server-boilerplate.cloudProviderFlavor" . -}}
-{{- $cloudProviderDockerRegistryUrl := include "ts-server-boilerplate.cloudProviderDockerRegistryUrl" . -}}
-{{- $imageTag := include "ts-server-boilerplate.tag" . -}}
+{{- $chartName := include "tiles-splitter.name" . -}}
+{{- $cloudProviderFlavor := include "tiles-splitter.cloudProviderFlavor" . -}}
+{{- $cloudProviderDockerRegistryUrl := include "tiles-splitter.cloudProviderDockerRegistryUrl" . -}}
+{{- $imageTag := include "tiles-splitter.tag" . -}}
 {{- if .Values.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -11,9 +11,9 @@ metadata:
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}
-    environment: {{ include "ts-server-boilerplate.environment" . }}
+    environment: {{ include "tiles-splitter.environment" . }}
     release: {{ $releaseName }}
-    {{- include "ts-server-boilerplate.labels" . | nindent 4 }}
+    {{- include "tiles-splitter.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -21,18 +21,24 @@ spec:
       app: {{ $chartName }}
       release: {{ $releaseName }}
       run: {{ $releaseName }}-{{ $chartName }}
-      {{- include "ts-server-boilerplate.selectorLabels" . | nindent 6 }}
+      {{- include "tiles-splitter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: {{ $chartName }}
         release: {{ $releaseName }}
         run: {{ $releaseName }}-{{ $chartName }}
-        {{- include "ts-server-boilerplate.selectorLabels" . | nindent 8 }}
+        {{- include "tiles-splitter.selectorLabels" . | nindent 8 }}
     spec:
     {{- if .Values.cloudProvider.imagePullSecretName }}
       imagePullSecrets:
         - name: {{ .Values.cloudProvider.imagePullSecretName | quote }}
+    {{- end }}
+    {{- if eq (upper .Values.env.storageProvider) "FS" }}
+      volumes:
+      - name: sources-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.internalPvc.name }}
     {{- end }}
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
@@ -51,6 +57,17 @@ spec:
             {{- if .Values.caSecretName }}
             - name: REQUESTS_CA_BUNDLE
               value: '/usr/local/share/ca-certificates/ca.crt'
+            {{- if eq (upper .Values.env.storageProvider) "S3" }}
+            - name: S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: { { .Values.env.S3.secret.name } }
+                  key: accessKeyId
+            - name: S3_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: { { .Values.env.S3.secret.name } }
+                  key: secretAccessKey
             {{- end }}
           envFrom:
             - configMapRef:
@@ -64,6 +81,12 @@ spec:
             httpGet:
               path: /liveness
               port: http
+#          {{- if eq (upper .Values.env.storageProvider) "FS" }}
+#          volumeMounts:
+#            - name: sources-storage
+#              mountPath: {{ .Values.storage.internalPvc.mountPath }}
+#              subPath: tiles
+#          {{- end }}
           {{- if .Values.resources.enabled }}
           resources:
             {{- toYaml .Values.resources.value | nindent 12 }}

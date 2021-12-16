@@ -1,14 +1,11 @@
 import config from 'config';
-import { logMethod } from '@map-colonies/telemetry';
 import { trace } from '@opentelemetry/api';
 import { DependencyContainer } from 'tsyringe/dist/typings/types';
-import jsLogger, { LoggerOptions } from '@map-colonies/js-logger';
-import { Metrics } from '@map-colonies/telemetry';
-import { SERVICES, SERVICE_NAME } from './common/constants';
-import { tracing } from './common/tracing';
-import { InjectionObject, registerDependencies } from './common/dependencyRegistration';
-import { IQueueConfig, ITilesConfig } from './common/interfaces';
-// import { getProviders } from './providers/providerManager';
+import jsLogger from '@map-colonies/js-logger';
+import { SERVICES } from '../src/common/constants';
+import { tracing } from '../src/common/tracing';
+import { InjectionObject, registerDependencies } from '../src/common/dependencyRegistration';
+import { IQueueConfig, ITilesConfig } from '../src/common/interfaces';
 
 export interface RegisterOptions {
   override?: InjectionObject<unknown>[];
@@ -16,13 +13,9 @@ export interface RegisterOptions {
 }
 
 export const registerExternalValues = (options?: RegisterOptions): DependencyContainer => {
-  const loggerConfig = config.get<LoggerOptions>('telemetry.logger');
-  // @ts-expect-error the signature is wrong
-  const logger = jsLogger({ ...loggerConfig, prettyPrint: loggerConfig.prettyPrint, hooks: { logMethod } });
+  const logger = jsLogger({ enabled: false });
   const queueConfig = config.get<IQueueConfig>('queue');
   const tilesConfig = config.get<ITilesConfig>('tiles');
-  const metrics = new Metrics(SERVICE_NAME);
-  const meter = metrics.start();
 
   tracing.start();
   const tracer = trace.getTracer('app');
@@ -33,18 +26,17 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
     { token: SERVICES.QUEUE_CONFIG, provider: { useValue: queueConfig } },
     { token: SERVICES.TILES_CONFIG, provider: { useValue: tilesConfig } },
     { token: SERVICES.TRACER, provider: { useValue: tracer } },
-    { token: SERVICES.METER, provider: { useValue: meter } },
+    { token: SERVICES.METER, provider: { useValue: jest.fn() } },
     {
       token: 'onSignal',
       provider: {
         useValue: {
           useValue: async (): Promise<void> => {
-            await Promise.all([tracing.stop(), metrics.stop()]);
+            await Promise.all([tracing.stop()]);
           },
         },
       },
     },
-    // ...getProviders(config, logger),
   ];
 
   return registerDependencies(dependencies, options?.override, options?.useChild);

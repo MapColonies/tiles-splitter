@@ -24,5 +24,30 @@
         "options": null
       }
     }
+  },
+  "splitAttempts": 5,
+  "tiles": {
+    "path": "/path/to/tiles/directory"
+  },
+  "queue": {
+    "jobManagerBaseUrl": "http://localhost:8082",
+    "heartbeatManagerBaseUrl": "http://localhost:8083",
+    "dequeueIntervalMs": 1000,
+    "heartbeatIntervalMs": 300,
+    "jobType": "Ingestion",
+    "splitTilesTaskType": "splitTilesSync"
+  },
+  "httpRetry": {
+    "attempts": 5,
+    "delay": "exponential",
+    "shouldResetTimeout": true
+  },
+  "storageProvider": "s3",
+  "S3": {
+    "accessKeyId": "minioadmin",
+    "secretAccessKey": "minioadmin",
+    "endpoint": "http://localhost:9000",
+    "bucket": "mapping-images",
+    "forcePathStyle": true
   }
 }
