@@ -26,3 +26,31 @@ export interface ITilesConfig {
   uploadBatchSize: number;
   sigIsNeeded: boolean;
 }
+
+export interface ITaskParams {
+  discreteId: string;
+  version: string;
+  fileNames: string[];
+  originDirectory: string;
+  layerRelativePath: string;
+  minZoom: number;
+  maxZoom: number;
+  bbox: number[];
+}
+
+export interface IVrtOptions {
+  vrtNodata: string;
+  outputSRS: string,
+  resampling: string,
+  addAlpha: boolean,
+  bbox?: Array<number>
+}
+
+export interface IGenerateTilesOptions {
+  resampling: string;
+  tmscompatible: boolean;
+  profile: string;
+  srcnodata: string;
+  zoom: number;
+  verbose: boolean;
+}

@@ -3,12 +3,14 @@ import { inject, singleton } from 'tsyringe';
 import { QueueClient } from './clients/queueClient';
 import { SERVICES } from './common/constants';
 import { IConfig } from './common/interfaces';
+import { GDALUtilities } from './gdalUtilities';
 
 // interface IParameters {
 //   resourceId: string;
 //   resourceVersion: string;
 //   layerRelativePath: string;
 // }
+
 
 @singleton()
 export class TileSplitterManager {
@@ -19,7 +21,8 @@ export class TileSplitterManager {
     @inject(SERVICES.CONFIG) private readonly config: IConfig,
     // @inject(SERVICES.TILES_CONFIG) private readonly tilesConfig: ITilesConfig,
     // @inject(SERVICES.STORAGE_PROVIDER) private readonly storageProvider: IStorageProvider,
-    private readonly queueClient: QueueClient
+    private readonly queueClient: QueueClient,
+    private readonly gdalUtilities: GDALUtilities
   ) {
     this.splitAttempts = this.config.get<number>('splitAttempts');
   }
@@ -37,7 +40,8 @@ export class TileSplitterManager {
         try {
           this.logger.info(`Running sync tiles task for taskId: ${tilesTask.id}, on jobId=${tilesTask.jobId}, attempt: ${attempts}`);
           // TODO: add GDAL logic here
-
+          await this.gdalUtilities.buildVrt(tilesTask);
+          await this.gdalUtilities.generateTiles()
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
         } catch (error) {
           await this.queueClient.queueHandlerForTileSplittingTasks.reject(jobId, taskId, true, (error as Error).message);

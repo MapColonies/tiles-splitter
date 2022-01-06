@@ -43,6 +43,7 @@
     "__name": "SPLIT_ATTEMPTS",
     "__format": "number"
   },
+  "sourceMountPath": "SOURCE_MOUNT_PATH",
   "tiles": {
     "path": "TILES_PATH",
     "format": "TILES_FORMAT"

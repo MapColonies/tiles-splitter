@@ -26,16 +26,21 @@
     }
   },
   "splitAttempts": 5,
+  "sourceMountPath": "/app",
+  "vrt": {
+    "outputDirPath": "/app/vrtOutputs",
+    "sourcesListFilePath": "/app/vrtOutputs/files.txt"
+  },
   "tiles": {
     "path": "/path/to/tiles/directory"
   },
   "queue": {
-    "jobManagerBaseUrl": "http://localhost:8082",
+    "jobManagerBaseUrl": "http://10.45.130.11:8088",
     "heartbeatManagerBaseUrl": "http://localhost:8083",
     "dequeueIntervalMs": 1000,
     "heartbeatIntervalMs": 300,
     "jobType": "Ingestion",
-    "splitTilesTaskType": "splitTilesSync"
+    "tilesTaskType": "splitTilesSync"
   },
   "httpRetry": {
     "attempts": 5,
