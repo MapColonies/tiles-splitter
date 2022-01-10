@@ -11,8 +11,8 @@ initialDelaySeconds: 60
 nodePort: 30030 #for minikube deployment only
 
 cloudProvider:
-  dockerRegistryUrl: my-registry-url.io
-  imagePullSecretName: 'my-registry-secret'
+  dockerRegistryUrl: 10.45.130.11:5000
+  imagePullSecretName: acr-registry
   flavor: openshift
 
 caSecretName: ''
@@ -60,16 +60,16 @@ env:
   tiles:
     path: /layerSources
   queue:
-    jobManagerBaseUrl: "http://localhost:8082"
-    heartbeatManagerBaseUrl: "http://localhost:8085"
+    jobManagerBaseUrl: "http://job-manager-job-manager"
+    heartbeatManagerBaseUrl: "http://job-manager-heartbeat-manager"
     dequeueIntervalMs: 1000
     heartbeatIntervalMs: 300
     jobType: "Ingestion"
     taskType: "splitTilesSync"
   storageProvider: "FS"
   S3:
-    endpoint: "http://localhost:9000"
-    bucket: "mapping-images"
+    endpoint: "http://10.8.1.13:9000"
+    bucket: "raster-tiles-dev"
     forcePathStyle: true
     sslEnabled: false
     virtualHosting: false

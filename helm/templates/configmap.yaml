@@ -20,15 +20,28 @@ data:
   TELEMETRY_METRICS_URL: {{ $metricsUrl }}
   {{ end }}
   SPLIT_ATTEMPTS: {{ .Values.env.splitAttempts | quote }}
+  # SOURCE_MOUNT_PATH: # VOLUME PV GOES HERE
   TILES_PATH: {{ .Values.env.tiles.path | quote }}
+  VRT_OUTPUT_DIR_PATH: "/app/vrtOutputs"
+  VRT_SOURCES_LIST_FILE_PATH: "/app/vrtOutputs/files.txt"
+  VRT_NODATA: {{ .Values.env.vrt.nodata | quote}}
+  VRT_OUTPUT_SRS: {{ .Values.env.vrt.outputSRS | quote }}
+  VRT_RESAMPLING: {{ .Values.env.vrt.resampling | quote }}
+  VRT_ADD_ALPHA: {{ .Values.env.vrt.addAlpha | quote }}
+  GENERATE_TILES_RESMAPLING: {{ .Values.env.generateTiles.resampling | quote }}
+  GENERATE_TILES_PROFILE: {{ .Values.env.generateTiles.profile | quote }}
+  GENERATE_TILES_SRC_NODATA: {{ .Values.env.generateTiles.srcnodata | quote }}
+  GENERATE_TILES_VERBOSE: {{ .Values.env.generateTiles.verbose | quote }}
   QUEUE_JOB_MANAGER_BASE_URL: {{ .Values.env.queue.jobManagerBaseUrl | quote }}
   QUEUE_HEART_BEAT_MANAGER_BASE_URL: {{ .Values.env.queue.heartbeatIntervalMs | quote }}
   QUEUE_DEQUEUE_INTERVAL_MS: {{ .Values.env.queue.dequeueIntervalMs | quote }}
   QUEUE_HEART_BEAT_INTERVAL_MS: {{ .Values.env.queue.heartbeatManagerBaseUrl | quote }}
   QUEUE_JOB_TYPE: {{ .Values.env.queue.jobType | quote }}
-  QUEUE_SPLIT_TILES_TASK_TYPE: {{ .Values.env.queue.splitTilesTaskType | quote }}
+  QUEUE_TASK_TYPE: {{ .Values.env.queue.taskType | quote }}
   STORAGE_PROVIDER: {{ .Values.env.storageProvider | quote }}
-  S3_ENDPOINT: {{ .Values.env.S3.endpoint | quote }}
+  AWS_S3_ENDPOINT: {{ .Values.env.S3.endpoint | quote }}
   S3_BUCKET: {{ .Values.env.S3.bucket | quote }}
   S3_FORCE_PATH_STYLE: {{ .Values.env.S3.forcePathStyle | quote }}
+  AWS_HTTPS: {{ .Values.env.S3.sslEnabled | quote }}
+  AWS_VIRTUAL_HOSTING: {{ .Values.env.S3.virtualHosting | quote }}
 {{- end }}
