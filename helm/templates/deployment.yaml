@@ -34,39 +34,37 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.cloudProvider.imagePullSecretName | quote }}
     {{- end }}
-    {{- if eq (upper .Values.env.storageProvider) "FS" }}
       volumes:
-      - name: sources-storage
+      - name: ingestion-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.storage.ingestionSourcePvc.name }}
+    {{- if eq (upper .Values.env.storageProvider) "FS" }}
+      - name: tiles-storage
         persistentVolumeClaim:
           claimName: {{ .Values.storage.internalPvc.name }}
     {{- end }}
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
           {{- with .Values.image }}
-          image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
+          {{- if ne $cloudProviderFlavor "minikube" }}
+          image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
+          {{- else }}
+          image: {{ .repository }}:{{ .tag }}
           {{- end }}
-          # volumeMounts:
-          #   {{- if .Values.caSecretName and .Values.caKey }}
-          #   - mountPath: '/usr/local/share/ca-certificates'
-          #     name: root-ca
-          #     subPath: {{ quote .Values.caKey }}
-          #   {{- end }}
+          {{- end }}
           env:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
-            {{- if .Values.caSecretName }}
-            - name: REQUESTS_CA_BUNDLE
-              value: '/usr/local/share/ca-certificates/ca.crt'
             {{- if eq (upper .Values.env.storageProvider) "S3" }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: { { .Values.env.S3.secret.name } }
+                  name: {{ .Values.env.S3.secret.name }}
                   key: accessKeyId
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: { { .Values.env.S3.secret.name } }
+                  name: {{ .Values.env.S3.secret.name }}
                   key: secretAccessKey
             {{- end }}
           envFrom:
@@ -80,15 +78,17 @@ spec:
             initialDelaySeconds: {{ .Values.initialDelaySeconds }}
             httpGet:
               path: /liveness
-              port: http
-          {{- if eq (upper .Values.env.storageProvider) "FS" }}
+              port: {{ .Values.env.targetPort }}
           volumeMounts:
-            - name: sources-storage
-              mountPath: {{ .Values.storage.internalPvc.mountPath }}
+            - name: ingestion-storage
+              mountPath: /layerSources
+            {{- if eq (upper .Values.env.storageProvider) "FS" }}
+            - name: tiles-storage
+              mountPath: /app/tiles_outputs
               subPath: tiles
-          {{- end }}
+            {{- end }}
           {{- if .Values.resources.enabled }}
           resources:
             {{- toYaml .Values.resources.value | nindent 12 }}
-          {{- end }}
+         {{- end }}
 {{- end -}}

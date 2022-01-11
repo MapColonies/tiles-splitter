@@ -20,8 +20,10 @@ data:
   TELEMETRY_METRICS_URL: {{ $metricsUrl }}
   {{ end }}
   SPLIT_ATTEMPTS: {{ .Values.env.splitAttempts | quote }}
-  # SOURCE_MOUNT_PATH: # VOLUME PV GOES HERE
-  TILES_PATH: {{ .Values.env.tiles.path | quote }}
+  SOURCE_MOUNT_PATH: "/layerSources"
+  {{ if eq (upper .Values.env.storageProvider) "FS" }}
+  TILES_PATH: "/app/tiles_outputs"
+  {{ end }}
   VRT_OUTPUT_DIR_PATH: "/app/vrtOutputs"
   VRT_SOURCES_LIST_FILE_PATH: "/app/vrtOutputs/files.txt"
   VRT_NODATA: {{ .Values.env.vrt.nodata | quote}}

@@ -23,13 +23,15 @@ image:
   tag: "latest"
 
 storage:
+  ingestionSourcePvc:
+    enabled: true
+    name: ingestion-source-pvc
+    subPath: ingestion-source
   internalPvc:
     create: false
     name: "internal-pvc"
-    mountPath: "/layerSources"
-  internalPv:
-    name: "internal-pv"
-    directory: "/layerSources"
+    tilesSubPath: tiles
+
 
 env:
   port: 8080
@@ -46,7 +48,6 @@ env:
     enabled: false
     url: "http://localhost:55681/v1/metrics"
   splitAttempts: 3
-  sourceMountPath: /app
   vrt:
     nodata: "0"
     outputSRS: "EPSG:4326"
@@ -57,8 +58,6 @@ env:
     profile: "geodetic"
     srcnodata: "0"
     verbose: true
-  tiles:
-    path: /layerSources
   queue:
     jobManagerBaseUrl: "http://localhost:8082"
     heartbeatManagerBaseUrl: "http://localhost:8085"

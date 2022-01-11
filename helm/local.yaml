@@ -23,14 +23,14 @@ image:
   tag: "latest"
 
 storage:
+  ingestionSourcePvc:
+    enabled: true
+    name: ingestion-source-pvc
+    subPath: ingestion-source
   internalPvc:
     create: false
     name: "internal-pvc"
-    mountPath: "/layerSources"
-  internalPv:
-    name: "internal-pv"
-    directory: "/layerSources"
-
+    tilesSubPath: tiles
 env:
   port: 8080
   targetPort: 8080
@@ -46,7 +46,7 @@ env:
     enabled: false
     url: "http://localhost:55681/v1/metrics"
   splitAttempts: 3
-  sourceMountPath: /app
+  sourceMountPath: /layerSources
   vrt:
     nodata: "0"
     outputSRS: "EPSG:4326"
@@ -57,8 +57,6 @@ env:
     profile: "geodetic"
     srcnodata: "0"
     verbose: true
-  tiles:
-    path: /layerSources
   queue:
     jobManagerBaseUrl: "http://job-manager-job-manager"
     heartbeatManagerBaseUrl: "http://job-manager-heartbeat-manager"
@@ -66,18 +64,18 @@ env:
     heartbeatIntervalMs: 300
     jobType: "Ingestion"
     taskType: "splitTilesSync"
-  storageProvider: "FS"
+  storageProvider: "S3"
   S3:
-    endpoint: "http://10.8.1.13:9000"
-    bucket: "raster-tiles-dev"
+    endpoint: "10.45.130.11:9000"
+    bucket: "dtm"
     forcePathStyle: true
     sslEnabled: false
     virtualHosting: false
     secret:
-      name: raster-tiles-s3-secret
-      createSecret: false # secret should be created on higher level for deployments with multiple services
-      accessKeyId: # used only when creating secret
-      secretAccessKey: # used only when creating secret
+      name: raster-tiles-s3-secret 
+      createSecret: true # secret should be created on higher level for deployments with multiple services
+      accessKeyId: minioadmin # used only when creating secret
+      secretAccessKey: minioadmin # used only when creating secret
 resources:
   enabled: true
   value:
