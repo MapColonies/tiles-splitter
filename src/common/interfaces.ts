@@ -31,10 +31,10 @@ export interface IS3Config {
   accessKeyId: string;
   secretAccessKey: string;
   endpoint: string;
-  bucket: string,
+  bucket: string;
   forcePathStyle: boolean;
-  sslEnabled: boolean,
-  virtualHosting: boolean
+  sslEnabled: boolean;
+  virtualHosting: boolean;
 }
 export interface ITaskParams {
   discreteId: string;
@@ -51,10 +51,9 @@ export interface IVrtConfig {
   outputDirPath: string;
   sourcesListFilePath: string;
   nodata: string;
-  outputSRS: string,
-  resampling: string,
-  addAlpha: boolean,
-  bbox?: Array<number>
+  outputSRS: string;
+  resampling: string;
+  addAlpha: boolean;
 }
 
 export interface IGenerateTilesConfig {

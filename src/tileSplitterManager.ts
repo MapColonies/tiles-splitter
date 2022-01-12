@@ -7,12 +7,6 @@ import { IConfig, IGenerateTilesConfig, IS3Config, ITaskParams, ITilesConfig, IV
 import { GDALUtilities } from './gdalUtilities';
 import { StorageProviderType } from './common/enums';
 
-// interface IParameters {
-//   resourceId: string;
-//   resourceVersion: string;
-//   layerRelativePath: string;
-// }
-
 @singleton()
 export class TileSplitterManager {
   private readonly splitAttempts: number;
@@ -46,10 +40,12 @@ export class TileSplitterManager {
       if (attempts <= this.splitAttempts) {
         try {
           this.logger.info(`Running sync tiles task for taskId: ${tilesTask.id}, on jobId=${tilesTask.jobId}, attempt: ${attempts}`);
-          // TODO: add GDAL logic here
+
           await gdalUtilities.buildVrt(tilesTask);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
+
+          this.logger.info(`TaskId: ${tilesTask.id}, on jobId=${tilesTask.jobId} Completed`);
         } catch (error) {
           await this.queueClient.queueHandlerForTileSplittingTasks.reject(jobId, taskId, true, (error as Error).message);
         } finally {
