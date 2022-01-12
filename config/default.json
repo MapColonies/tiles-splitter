@@ -45,7 +45,7 @@
     "path": "/app/vol2"
   },
   "queue": {
-    "jobManagerBaseUrl": "http://10.45.130.11:8088",
+    "jobManagerBaseUrl": "http://localhost:8088",
     "heartbeatManagerBaseUrl": "http://localhost:8083",
     "dequeueIntervalMs": 1000,
     "heartbeatIntervalMs": 300,
@@ -61,8 +61,8 @@
   "S3": {
     "accessKeyId": "minioadmin",
     "secretAccessKey": "minioadmin",
-    "endpoint": "http://10.45.130.11:9000",
-    "bucket": "dtm",
+    "endpoint": "http://localhost:9000",
+    "bucket": "bucket_name",
     "forcePathStyle": true,
     "sslEnabled": false,
     "virtualHosting": false
