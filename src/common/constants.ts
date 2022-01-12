@@ -14,8 +14,11 @@ export const SERVICES: Record<string, symbol> = {
   METER: Symbol('Meter'),
   QUEUE_CONFIG: Symbol('IQueueconfig'),
   TILES_CONFIG: Symbol('ITilesConfig'),
+  VRT_CONFIG: Symbol('IVrtConfig'),
+  GENERATE_TILES_CONFIG: Symbol('IGenerateTilesConfig'),
   CRYPTO_CONFIG: Symbol('ICryptoConfig'),
   GATEWAY_CONFIG: Symbol('IGatewayConfig'),
+  S3_CONFIG: Symbol('IS3Config'),
   STORAGE_PROVIDER: Symbol('storageProvider'),
 };
 /* eslint-enable @typescript-eslint/naming-convention */

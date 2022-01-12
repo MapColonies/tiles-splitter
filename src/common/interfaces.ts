@@ -27,6 +27,15 @@ export interface ITilesConfig {
   sigIsNeeded: boolean;
 }
 
+export interface IS3Config {
+  accessKeyId: string;
+  secretAccessKey: string;
+  endpoint: string;
+  bucket: string,
+  forcePathStyle: boolean;
+  sslEnabled: boolean,
+  virtualHosting: boolean
+}
 export interface ITaskParams {
   discreteId: string;
   version: string;
@@ -38,19 +47,21 @@ export interface ITaskParams {
   bbox: number[];
 }
 
-export interface IVrtOptions {
-  vrtNodata: string;
+export interface IVrtConfig {
+  outputDirPath: string;
+  sourcesListFilePath: string;
+  nodata: string;
   outputSRS: string,
   resampling: string,
   addAlpha: boolean,
   bbox?: Array<number>
 }
 
-export interface IGenerateTilesOptions {
+export interface IGenerateTilesConfig {
   resampling: string;
   tmscompatible: boolean;
   profile: string;
   srcnodata: string;
-  zoom: number;
+  zoom: string;
   verbose: boolean;
 }

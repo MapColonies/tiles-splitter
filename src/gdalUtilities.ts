@@ -1,57 +1,69 @@
-import { $ } from 'zx';
+import { $, fs } from 'zx';
 import config from 'config';
 import { join } from 'path';
 import { Transform } from 'stream';
-import { createWriteStream, unlinkSync } from 'fs';
-import { inject, singleton } from 'tsyringe';
+import { createWriteStream, promises as fsPromises } from 'fs';
 import { Logger } from '@map-colonies/js-logger';
-import { SERVICES } from './common/constants';
-import { IGenerateTilesOptions, ITaskParams, IVrtOptions } from './common/interfaces';
+import { IGenerateTilesConfig, ITaskParams, IVrtConfig } from './common/interfaces';
 import { QueueClient } from './clients/queueClient';
 import { ITaskResponse } from '@map-colonies/mc-priority-queue';
 
 type TransformCallback = (error?: Error | null, data?: any) => void;
 
-@singleton()
 export class GDALUtilities {
-  public constructor(@inject(SERVICES.LOGGER) private readonly logger: Logger, private readonly queueClient: QueueClient) {}
+  private readonly jobId: string;
+  private readonly taskId: string;
+
+  public constructor(
+    private readonly logger: Logger,
+    private readonly vrtConfig: IVrtConfig,
+    private readonly generateTilesConfig: IGenerateTilesConfig,
+    private readonly queueClient: QueueClient,
+    private readonly task: ITaskResponse
+  ) {
+    this.jobId = this.task.jobId;
+    this.taskId = this.task.id;
+  }
 
   public async buildVrt(task: ITaskResponse): Promise<void> {
     const discreteId = (task.parameters as ITaskParams).discreteId;
     const fileNamesList = (task.parameters as ITaskParams).fileNames;
     const sourcesOriginDir = (task.parameters as ITaskParams).originDirectory;
-    const sourcesListFilePath = config.get<string>('vrt.sourcesListFilePath');
-    const vrtPath = this.getVrtFilePath(discreteId);
-    const options: IVrtOptions = {
-      vrtNodata: '0',
-      outputSRS: 'EPSG:4326',
-      resampling: 'average',
-      addAlpha: true,
-    };
-
-    // create text file with the included file names
-    this.createFileNamesList(fileNamesList, sourcesOriginDir, sourcesListFilePath);
-    // execute gdalbuildvrt cmd
-    await $`gdalbuildvrt -vrtnodata ${options.vrtNodata} -a_srs ${options.outputSRS} -r ${options.resampling} -input_file_list ${sourcesListFilePath} ${vrtPath}`;
-    // removed the sources list file
-    unlinkSync(sourcesListFilePath);
+    try {
+      const vrtPath = this.getVrtFilePath(discreteId);
+      // create text file with the included file names for vrt the creation
+      this.createFileNamesList(fileNamesList, sourcesOriginDir, this.vrtConfig.sourcesListFilePath);
+      // execute gdalbuildvrt cmd
+      await $`gdalbuildvrt -vrtnodata ${this.vrtConfig.nodata} -a_srs ${this.vrtConfig.outputSRS} -r ${this.vrtConfig.resampling} -input_file_list ${this.vrtConfig.sourcesListFilePath} ${vrtPath}`;
+    } catch (error) {
+      this.logger.error(`failed to create VRT file: ${error}`);
+      throw error;
+    } finally {
+      // removed the sources list file
+      await fsPromises.unlink(this.vrtConfig.sourcesListFilePath);
+    }
   }
 
-  public async generateTiles(): Promise<void> {
-    const options: IGenerateTilesOptions = {
-      resampling: 'average',
-      tmscompatible: true,
-      profile: 'geodetic',
-      srcnodata: '0',
-      zoom: 13,
-      verbose: false,
-    };
+  public async generateTiles(task: ITaskResponse, tilesBasePath: string): Promise<void> {
+    const discreteId = (task.parameters as ITaskParams).discreteId;
+    const layerRelativePath = (task.parameters as ITaskParams).layerRelativePath;
+    const tilesPath = join(tilesBasePath, layerRelativePath);
+    const vrtPath = this.getVrtFilePath(discreteId);
+    const minZoom = (task.parameters as ITaskParams).minZoom;
+    const maxZoom = (task.parameters as ITaskParams).maxZoom;
+    const zoomLevels = `${minZoom}-${maxZoom}`;
+    try {
+      const outputStream = new Transform({
+        transform: this.gdalProgressFunc,
+      });
 
-    const outputStream = new Transform({
-      transform: this.gdalProgressFunc,
-    });
-
-    await $`gdal2tiles.py --zoom=${options.zoom} --profile=${options.profile} --resampling=${options.resampling} --srcnodata=${options.srcnodata} --tmscompatible /app/vrtOutputs/Ayosh_v1.0.vrt /app/vol2/AyoshTiles`.pipe(outputStream);
+      await $`gdal2tiles.py --zoom=${zoomLevels} --profile=${this.generateTilesConfig.profile} --resampling=${this.generateTilesConfig.resampling} --srcnodata=${this.generateTilesConfig.srcnodata} --tmscompatible --no-kml ${vrtPath} ${tilesPath}`.pipe(
+        outputStream
+      );
+    } catch (error) {
+      this.logger.error(`failed to generate tiles: ${error}`);
+      throw error;
+    }
   }
 
   private gdalProgressFunc = async (chunk: any, encoding: BufferEncoding, callback: TransformCallback) => {
@@ -71,19 +83,33 @@ export class GDALUtilities {
     if (currentProgressPercent !== lastProgressPercent && outputArr.length) {
       lastProgressPercent = currentProgressPercent;
       const percentNum = lastProgressPercent;
-      await this.queueClient.queueHandlerForTileSplittingTasks.updateProgress(
-        '27f6ef71-c59c-4855-8ee2-433da56bebb7',
-        '1e923070-2307-47d5-a81f-cf0018daca3f',
-        percentNum
-      );
+      await this.queueClient.queueHandlerForTileSplittingTasks.updateProgress(this.jobId, this.taskId, percentNum);
     }
     callback();
   };
 
-  private getVrtFilePath(discreteId: string): string {
+  public async removeVrtFile(vrtPath: string): Promise<void> {
+    try {
+      this.logger.info(`removing vrt file from path: ${vrtPath}`);
+      await fsPromises.unlink(vrtPath);
+    } catch (error) {
+      this.logger.error(`failed to remove vrt file from path: ${vrtPath}, error: ${error}`);
+    }
+  }
+
+  public async removeS3TempFiles(baseTilesPath: string, discreteId: string): Promise<void> {
+    const s3TempFilesPath = join(baseTilesPath, discreteId);
+    try {
+      this.logger.info(`removing s3 temp files from directory: ${s3TempFilesPath}`);
+      await fsPromises.rmdir(s3TempFilesPath, { recursive: true });
+    } catch (error) {
+      this.logger.error(`failed to remove temp s3 files from path: ${s3TempFilesPath}, error: ${error}`);
+    }
+  }
+
+  public getVrtFilePath(discreteId: string): string {
     const vrtFileName = `${discreteId}.vrt`;
-    const vrtOutputDirPath = config.get<string>('vrt.outputDirPath');
-    const vrtOutputPath = join(vrtOutputDirPath, vrtFileName);
+    const vrtOutputPath = join(this.vrtConfig.outputDirPath, vrtFileName);
     return vrtOutputPath;
   }
 

@@ -114,3 +114,5 @@ dist
 # Jest
 jest_html_reporters.html
 reports
+local.yaml
+local.json
