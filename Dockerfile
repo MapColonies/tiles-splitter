@@ -12,7 +12,6 @@ FROM osgeo/gdal:alpine-normal-3.2.0 as production
 ENV CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE 'YES'
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node
-#FROM node:14.18.2-alpine3.12 as production
 
 RUN mkdir /vsis3 && chmod -R 777 /vsis3
 RUN mkdir /app
@@ -52,6 +51,6 @@ RUN npm ci --only=production
 COPY --chown=node:node --from=build /tmp/buildApp/dist .
 COPY --chown=node:node ./config ./config
 
-# USER node
+USER node
 EXPOSE 8080
 CMD ["dumb-init", "node", "--max_old_space_size=512", "./index.js"]
