@@ -57,6 +57,8 @@ export class GDALUtilities {
         this.vrtConfig.sourcesListFilePath,
         vrtPath, // output path
       ];
+
+      this.logger.debug(`creating VRT file in path: ${vrtPath}`);
       await $`gdalbuildvrt ${args}`;
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -70,6 +72,7 @@ export class GDALUtilities {
 
   public async generateTiles(task: ITaskResponse, tilesBasePath: string): Promise<void> {
     const discreteId = (task.parameters as ITaskParams).discreteId;
+    const version = (task.parameters as ITaskParams).version;
     const layerRelativePath = (task.parameters as ITaskParams).layerRelativePath;
     const tilesPath = join(tilesBasePath, layerRelativePath);
     const vrtPath = this.getVrtFilePath(discreteId);
@@ -97,6 +100,7 @@ export class GDALUtilities {
         tilesPath, // tiles outhput path
       ];
 
+      this.logger.debug(`generating tiles for discrete id: ${discreteId} version: ${version} in path: ${tilesPath}`);
       const cmd = $`gdal2tiles.py ${args}`;
       cmd.stdout.pipe(outputStream);
       await cmd;
