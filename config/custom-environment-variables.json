@@ -62,7 +62,10 @@
     "resampling": "GENERATE_TILES_RESMAPLING",
     "profile": "GENERATE_TILES_PROFILE",
     "srcnodata": "GENERATE_TILES_SRC_NODATA",
-    "verbose": "GENERATE_TILES_VERBOSE"
+    "verbose": {
+      "__name": "GENERATE_TILES_VERBOSE",
+      "__format": "boolean"
+    }
   },
   "queue": {
     "jobManagerBaseUrl": "QUEUE_JOB_MANAGER_BASE_URL",
