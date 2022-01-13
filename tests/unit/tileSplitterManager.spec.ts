@@ -31,12 +31,20 @@ describe('syncManager', () => {
     const vrtConfig = configMock.get<IVrtConfig>('vrt');
     const generateTilesConfig = configMock.get<IGenerateTilesConfig>('generateTiles');
     const tilesConfig = configMock.get<ITilesConfig>('tiles');
-    tileSplitterManager = new TileSplitterManager(jsLogger({ enabled: false }), configMock, s3Config, vrtConfig, generateTilesConfig, tilesConfig, queueClient);
+    tileSplitterManager = new TileSplitterManager(
+      jsLogger({ enabled: false }),
+      configMock,
+      s3Config,
+      vrtConfig,
+      generateTilesConfig,
+      tilesConfig,
+      queueClient
+    );
 
     buildVrtStub = jest.spyOn(GDALUtilities.prototype, 'buildVrt').mockImplementation(async () => Promise.resolve());
     generateTilesStub = jest.spyOn(GDALUtilities.prototype, 'generateTiles').mockImplementation(async () => Promise.resolve());
-    removeVrtFileStub = jest.spyOn(GDALUtilities.prototype, "removeVrtFile").mockImplementation(async () => Promise.resolve());
-    removeS3TempFiles = jest.spyOn(GDALUtilities.prototype, "removeS3TempFiles").mockImplementation(async () => Promise.resolve());
+    removeVrtFileStub = jest.spyOn(GDALUtilities.prototype, 'removeVrtFile').mockImplementation(async () => Promise.resolve());
+    removeS3TempFiles = jest.spyOn(GDALUtilities.prototype, 'removeS3TempFiles').mockImplementation(async () => Promise.resolve());
     ackStubForTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'ack').mockImplementation(async () => Promise.resolve());
     rejectStubForTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'reject').mockImplementation(async () => Promise.resolve());
   });
