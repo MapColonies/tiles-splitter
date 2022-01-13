@@ -90,7 +90,7 @@ export class GDALUtilities {
         '-r', // resmapling
         this.generateTilesConfig.resampling,
         '-a', // src no data value
-        //this.generateTilesConfig.srcnodata,
+        this.generateTilesConfig.srcnodata,
         '--tmscompatible', // tiling scheme (2:1)
         '--no-kml', // ingore kml files
         vrtPath, // input file path

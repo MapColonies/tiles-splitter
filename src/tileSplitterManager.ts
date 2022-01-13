@@ -39,7 +39,7 @@ export class TileSplitterManager {
 
       if (attempts <= this.splitAttempts) {
         try {
-          this.logger.info(`Running sync tiles task for taskId: ${tilesTask.id}, on jobId=${tilesTask.jobId}, attempt: ${attempts}`);
+          this.logger.info(`Running split tiles task for taskId: ${tilesTask.id}, on jobId=${tilesTask.jobId}, attempt: ${attempts}`);
 
           await gdalUtilities.buildVrt(tilesTask);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);

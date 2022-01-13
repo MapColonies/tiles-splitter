@@ -13,8 +13,8 @@ ENV CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE 'YES'
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node
 
-RUN mkdir /vsis3 && chmod -R 777 /vsis3
 RUN mkdir /app
+RUN mkdir /vsis3 && chmod -R 777 /vsis3
 WORKDIR /app
 
 RUN mkdir vrtOutputs && chmod -R 777 ./vrtOutputs
@@ -32,11 +32,6 @@ RUN wget "https://unofficial-builds.nodejs.org/download/release/$VERSION/node-$V
 RUN tar -xJf node-$VERSION-$DISTRO-musl.tar.xz  -C /usr/local --strip-components=1 --no-same-owner \
     && ln -s "/usr/local/bin/node" /usr/local/bin/nodejs;
 
-RUN apk update \
-    &&  pip3 install --upgrade pip
-COPY requirements.txt ./
-RUN pip3 install -r ./requirements.txt -t /app
-RUN apk del py3-pip gcc git
 
 RUN apk add dumb-init
 

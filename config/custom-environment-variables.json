@@ -53,7 +53,10 @@
     "nodata": "VRT_NODATA",
     "outputSRS": "VRT_OUTPUT_SRS",
     "resampling": "VRT_RESAMPLING",
-    "addAlpha": "VRT_ADD_ALPHA"
+    "addAlpha": {
+      "__name": "VRT_ADD_ALPHA",
+      "__format": "boolean"
+    }
   },
   "generateTiles": {
     "resampling": "GENERATE_TILES_RESMAPLING",
