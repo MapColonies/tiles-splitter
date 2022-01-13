@@ -1,6 +1,0 @@
-yarl
-multidict
-mapcoloniesjsonlogger==1.0.0
-requests
-boto3
-gdal2tiles
