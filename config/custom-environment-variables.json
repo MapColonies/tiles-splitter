@@ -43,9 +43,29 @@
     "__name": "SPLIT_ATTEMPTS",
     "__format": "number"
   },
+  "sourceMountPath": "SOURCE_MOUNT_PATH",
   "tiles": {
-    "path": "TILES_PATH",
-    "format": "TILES_FORMAT"
+    "path": "TILES_PATH"
+  },
+  "vrt": {
+    "outputDirPath": "VRT_OUTPUT_DIR_PATH",
+    "sourcesListFilePath": "VRT_SOURCES_LIST_FILE_PATH",
+    "nodata": "VRT_NODATA",
+    "outputSRS": "VRT_OUTPUT_SRS",
+    "resampling": "VRT_RESAMPLING",
+    "addAlpha": {
+      "__name": "VRT_ADD_ALPHA",
+      "__format": "boolean"
+    }
+  },
+  "generateTiles": {
+    "resampling": "GENERATE_TILES_RESMAPLING",
+    "profile": "GENERATE_TILES_PROFILE",
+    "srcnodata": "GENERATE_TILES_SRC_NODATA",
+    "verbose": {
+      "__name": "GENERATE_TILES_VERBOSE",
+      "__format": "boolean"
+    }
   },
   "queue": {
     "jobManagerBaseUrl": "QUEUE_JOB_MANAGER_BASE_URL",
@@ -59,16 +79,24 @@
       "__format": "number"
     },
     "jobType": "QUEUE_JOB_TYPE",
-    "tilesTaskType": "QUEUE_TILES_TASK_TYPE"
+    "tilesTaskType": "QUEUE_TASK_TYPE"
   },
   "storageProvider": "STORAGE_PROVIDER",
   "S3": {
-    "accessKeyId": "S3_ACCESS_KEY_ID",
-    "secretAccessKey": "S3_SECRET_ACCESS_KEY",
-    "endpoint": "S3_ENDPOINT",
+    "accessKeyId": "AWS_ACCESS_KEY_ID",
+    "secretAccessKey": "AWS_SECRET_ACCESS_KEY",
+    "endpoint": "AWS_S3_ENDPOINT",
     "bucket": "S3_BUCKET",
     "forcePathStyle": {
       "__name": "S3_FORCE_PATH_STYLE",
+      "__format": "boolean"
+    },
+    "sslEnabled": {
+      "__name": "AWS_HTTPS",
+      "__format": "boolean"
+    },
+    "virtualHosting": {
+      "__name": "AWS_VIRTUAL_HOSTING",
       "__format": "boolean"
     }
   }

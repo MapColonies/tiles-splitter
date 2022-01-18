@@ -38,7 +38,7 @@ const mainLoop = async (): Promise<void> => {
         await new Promise((resolve) => setTimeout(resolve, dequeueIntervalMs));
       }
     } catch (error) {
-      logger.error(`mainLoop: Error: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`);
+      logger.fatal(`mainLoop: Error: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`);
       await new Promise((resolve) => setTimeout(resolve, dequeueIntervalMs));
     }
   }

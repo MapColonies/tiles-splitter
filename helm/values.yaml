@@ -23,13 +23,15 @@ image:
   tag: "latest"
 
 storage:
+  ingestionSourcePvc:
+    enabled: true
+    name: ingestion-source-pvc
+    subPath: ingestion-source
   internalPvc:
     create: false
     name: "internal-pvc"
-    mountPath: "/layerSources"
-  internalPv:
-    name: "internal-pv"
-    directory: "/layerSources"
+    tilesSubPath: tiles
+
 
 env:
   port: 8080
@@ -45,25 +47,31 @@ env:
   metrics:
     enabled: false
     url: "http://localhost:55681/v1/metrics"
-  attempts: 3
-  tiles:
-    path: /layerSources
-    format: png
-    uploadBatchSize: 100
-    sigIsNeeded: false
+  splitAttempts: 3
+  vrt:
+    nodata: "0"
+    outputSRS: "EPSG:4326"
+    resampling: "average"
+    addAlpha: true
+  generateTiles:
+    resampling: "average"
+    profile: "geodetic"
+    srcnodata: "0"
+    verbose: true
   queue:
     jobManagerBaseUrl: "http://localhost:8082"
     heartbeatManagerBaseUrl: "http://localhost:8085"
     dequeueIntervalMs: 1000
     heartbeatIntervalMs: 300
-    jobType: "Sync"
-    tilesTaskType: "tilesSync"
-    tocTaskType: "tocSync"
+    jobType: "Ingestion"
+    taskType: "splitTilesSync"
   storageProvider: "FS"
   S3:
     endpoint: "http://localhost:9000"
     bucket: "mapping-images"
     forcePathStyle: true
+    sslEnabled: false
+    virtualHosting: false
     secret:
       name: raster-tiles-s3-secret
       createSecret: false # secret should be created on higher level for deployments with multiple services

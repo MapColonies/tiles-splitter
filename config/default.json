@@ -26,28 +26,45 @@
     }
   },
   "splitAttempts": 5,
+  "sourceMountPath": "/app",
+  "vrt": {
+    "outputDirPath": "/app/vrtOutputs",
+    "sourcesListFilePath": "/app/vrtOutputs/files.txt",
+    "nodata": "0",
+    "outputSRS": "EPSG:4326",
+    "resampling": "average",
+    "addAlpha": true
+  },
+  "generateTiles": {
+    "resampling": "average",
+    "profile": "geodetic",
+    "srcnodata": "0",
+    "verbose": true
+  },
   "tiles": {
-    "path": "/path/to/tiles/directory"
+    "path": "/app/vol2"
   },
   "queue": {
-    "jobManagerBaseUrl": "http://localhost:8082",
+    "jobManagerBaseUrl": "http://localhost:8088",
     "heartbeatManagerBaseUrl": "http://localhost:8083",
     "dequeueIntervalMs": 1000,
     "heartbeatIntervalMs": 300,
     "jobType": "Ingestion",
-    "splitTilesTaskType": "splitTilesSync"
+    "tilesTaskType": "splitTilesSync"
   },
   "httpRetry": {
     "attempts": 5,
     "delay": "exponential",
     "shouldResetTimeout": true
   },
-  "storageProvider": "s3",
+  "storageProvider": "FS",
   "S3": {
     "accessKeyId": "minioadmin",
     "secretAccessKey": "minioadmin",
     "endpoint": "http://localhost:9000",
-    "bucket": "mapping-images",
-    "forcePathStyle": true
+    "bucket": "bucket_name",
+    "forcePathStyle": true,
+    "sslEnabled": false,
+    "virtualHosting": false
   }
 }
