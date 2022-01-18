@@ -5,7 +5,7 @@ global:
   environment: {}
 
 enabled: true
-environment: development
+environment: "development"
 replicaCount: 1
 initialDelaySeconds: 60
 nodePort: 30030 #for minikube deployment only
@@ -19,8 +19,19 @@ caSecretName: ''
 caKey: 'ca.crt'
 
 image:
-  repository: ts-server-boilerplate
-  tag: 'latest'
+  repository: "tiles-splitter"
+  tag: "latest"
+
+storage:
+  ingestionSourcePvc:
+    enabled: true
+    name: ingestion-source-pvc
+    subPath: ingestion-source
+  internalPvc:
+    create: false
+    name: "internal-pvc"
+    tilesSubPath: tiles
+
 
 env:
   port: 8080
@@ -32,32 +43,47 @@ env:
   requestPayloadLimit: 1mb
   tracing:
     enabled: false
-    url: http://localhost:55681/v1/trace
+    url: "http://localhost:55681/v1/trace"
   metrics:
     enabled: false
-    url: http://localhost:55681/v1/metrics
-
+    url: "http://localhost:55681/v1/metrics"
+  splitAttempts: 3
+  vrt:
+    nodata: "0"
+    outputSRS: "EPSG:4326"
+    resampling: "average"
+    addAlpha: true
+  generateTiles:
+    resampling: "average"
+    profile: "geodetic"
+    srcnodata: "0"
+    verbose: true
+  queue:
+    jobManagerBaseUrl: "http://localhost:8082"
+    heartbeatManagerBaseUrl: "http://localhost:8085"
+    dequeueIntervalMs: 1000
+    heartbeatIntervalMs: 300
+    jobType: "Ingestion"
+    taskType: "splitTilesSync"
+  storageProvider: "FS"
+  S3:
+    endpoint: "http://localhost:9000"
+    bucket: "mapping-images"
+    forcePathStyle: true
+    sslEnabled: false
+    virtualHosting: false
+    secret:
+      name: raster-tiles-s3-secret
+      createSecret: false # secret should be created on higher level for deployments with multiple services
+      accessKeyId: # used only when creating secret
+      secretAccessKey: # used only when creating secret
 resources:
   enabled: true
   value:
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: "100m"
+      memory: "128Mi"
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: "100m"
+      memory: "128Mi"
 
-route:
-  enabled: true
-  path: /
-  timeout:
-    enabled: false # defaults to 30s by openshift
-    duration: 60s # supported units (us, ms, s, m, h, d)
-
-ingress:
-  enabled: false
-  path: /
-  host: 'localhost'
-  cors:
-    enabled: true
-    origin: '*'

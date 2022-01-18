@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import { OpenapiViewerRouter, OpenapiRouterConfig } from '@map-colonies/openapi-express-viewer';
@@ -9,25 +9,17 @@ import { Logger } from '@map-colonies/js-logger';
 import httpLogger from '@map-colonies/express-access-log-middleware';
 import { SERVICES } from './common/constants';
 import { IConfig } from './common/interfaces';
-import { RESOURCE_NAME_ROUTER_SYMBOL } from './resourceName/routes/resourceNameRouter';
-import { ANOTHER_RESOURECE_ROUTER_SYMBOL } from './anotherResource/routes/anotherResourceRouter';
 
 @injectable()
 export class ServerBuilder {
   private readonly serverInstance: express.Application;
 
-  public constructor(
-    @inject(SERVICES.CONFIG) private readonly config: IConfig,
-    @inject(SERVICES.LOGGER) private readonly logger: Logger,
-    @inject(RESOURCE_NAME_ROUTER_SYMBOL) private readonly resourceNameRouter: Router,
-    @inject(ANOTHER_RESOURECE_ROUTER_SYMBOL) private readonly anotherResourceRouter: Router
-  ) {
+  public constructor(@inject(SERVICES.CONFIG) private readonly config: IConfig, @inject(SERVICES.LOGGER) private readonly logger: Logger) {
     this.serverInstance = express();
   }
 
   public build(): express.Application {
     this.registerPreRoutesMiddleware();
-    this.buildRoutes();
     this.registerPostRoutesMiddleware();
 
     return this.serverInstance;
@@ -37,12 +29,6 @@ export class ServerBuilder {
     const openapiRouter = new OpenapiViewerRouter(this.config.get<OpenapiRouterConfig>('openapiConfig'));
     openapiRouter.setup();
     this.serverInstance.use(this.config.get<string>('openapiConfig.basePath'), openapiRouter.getRouter());
-  }
-
-  private buildRoutes(): void {
-    this.serverInstance.use('/resourceName', this.resourceNameRouter);
-    this.serverInstance.use('/anotherResource', this.anotherResourceRouter);
-    this.buildDocsRoutes();
   }
 
   private registerPreRoutesMiddleware(): void {

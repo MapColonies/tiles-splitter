@@ -1,1 +1,12 @@
-{}
+{
+  "tiles": {
+    "path": "tests/mocks/tiles",
+    "format": "png",
+    "uploadBatchSize": 100,
+    "sigIsNeeded": true
+  },
+  "queue": {
+    "dequeueIntervalMs": 1000,
+    "heartbeatIntervalMs": 1000
+  }
+}

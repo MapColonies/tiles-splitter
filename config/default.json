@@ -24,5 +24,47 @@
         "options": null
       }
     }
+  },
+  "splitAttempts": 5,
+  "sourceMountPath": "/app",
+  "vrt": {
+    "outputDirPath": "/app/vrtOutputs",
+    "sourcesListFilePath": "/app/vrtOutputs/files.txt",
+    "nodata": "0",
+    "outputSRS": "EPSG:4326",
+    "resampling": "average",
+    "addAlpha": true
+  },
+  "generateTiles": {
+    "resampling": "average",
+    "profile": "geodetic",
+    "srcnodata": "0",
+    "verbose": true
+  },
+  "tiles": {
+    "path": "/app/vol2"
+  },
+  "queue": {
+    "jobManagerBaseUrl": "http://localhost:8088",
+    "heartbeatManagerBaseUrl": "http://localhost:8083",
+    "dequeueIntervalMs": 1000,
+    "heartbeatIntervalMs": 300,
+    "jobType": "Ingestion",
+    "tilesTaskType": "splitTilesSync"
+  },
+  "httpRetry": {
+    "attempts": 5,
+    "delay": "exponential",
+    "shouldResetTimeout": true
+  },
+  "storageProvider": "FS",
+  "S3": {
+    "accessKeyId": "minioadmin",
+    "secretAccessKey": "minioadmin",
+    "endpoint": "http://localhost:9000",
+    "bucket": "bucket_name",
+    "forcePathStyle": true,
+    "sslEnabled": false,
+    "virtualHosting": false
   }
 }

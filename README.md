@@ -2,11 +2,11 @@
 
 ----------------------------------
 
-![badge-alerts-lgtm](https://img.shields.io/lgtm/alerts/github/MapColonies/ts-server-boilerplate?style=for-the-badge)
+![badge-alerts-lgtm](https://img.shields.io/lgtm/alerts/github/MapColonies/tiles-splitter?style=for-the-badge)
 
-![grade-badge-lgtm](https://img.shields.io/lgtm/grade/javascript/github/MapColonies/ts-server-boilerplate?style=for-the-badge)
+![grade-badge-lgtm](https://img.shields.io/lgtm/grade/javascript/github/MapColonies/tiles-splitter?style=for-the-badge)
 
-![snyk](https://img.shields.io/snyk/vulnerabilities/github/MapColonies/ts-server-boilerplate?style=for-the-badge)
+![snyk](https://img.shields.io/snyk/vulnerabilities/github/MapColonies/tiles-splitter?style=for-the-badge)
 
 ----------------------------------
 
@@ -77,7 +77,7 @@ Clone the project
 
 ```bash
 
-git clone https://link-to-project
+git clone https://github.com/MapColonies/tiles-splitter.git
 
 ```
 
@@ -85,7 +85,7 @@ Go to the project directory
 
 ```bash
 
-cd my-project
+cd tiles-splitter
 
 ```
 

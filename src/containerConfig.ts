@@ -6,9 +6,8 @@ import jsLogger, { LoggerOptions } from '@map-colonies/js-logger';
 import { Metrics } from '@map-colonies/telemetry';
 import { SERVICES, SERVICE_NAME } from './common/constants';
 import { tracing } from './common/tracing';
-import { resourceNameRouterFactory, RESOURCE_NAME_ROUTER_SYMBOL } from './resourceName/routes/resourceNameRouter';
 import { InjectionObject, registerDependencies } from './common/dependencyRegistration';
-import { anotherResourceRouterFactory, ANOTHER_RESOURECE_ROUTER_SYMBOL } from './anotherResource/routes/anotherResourceRouter';
+import { IGenerateTilesConfig, IQueueConfig, IS3Config, ITilesConfig, IVrtConfig } from './common/interfaces';
 
 export interface RegisterOptions {
   override?: InjectionObject<unknown>[];
@@ -19,20 +18,27 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
   const loggerConfig = config.get<LoggerOptions>('telemetry.logger');
   // @ts-expect-error the signature is wrong
   const logger = jsLogger({ ...loggerConfig, prettyPrint: loggerConfig.prettyPrint, hooks: { logMethod } });
-
+  const queueConfig = config.get<IQueueConfig>('queue');
+  const tilesConfig = config.get<ITilesConfig>('tiles');
+  const vrtConfig = config.get<IVrtConfig>('vrt');
+  const s3Config = config.get<IS3Config>('S3');
+  const generateTilesConfig = config.get<IGenerateTilesConfig>('generateTiles');
   const metrics = new Metrics(SERVICE_NAME);
   const meter = metrics.start();
 
   tracing.start();
-  const tracer = trace.getTracer(SERVICE_NAME);
+  const tracer = trace.getTracer('app');
 
   const dependencies: InjectionObject<unknown>[] = [
     { token: SERVICES.CONFIG, provider: { useValue: config } },
     { token: SERVICES.LOGGER, provider: { useValue: logger } },
+    { token: SERVICES.QUEUE_CONFIG, provider: { useValue: queueConfig } },
+    { token: SERVICES.TILES_CONFIG, provider: { useValue: tilesConfig } },
+    { token: SERVICES.VRT_CONFIG, provider: { useValue: vrtConfig } },
+    { token: SERVICES.GENERATE_TILES_CONFIG, provider: { useValue: generateTilesConfig } },
+    { token: SERVICES.S3_CONFIG, provider: { useValue: s3Config } },
     { token: SERVICES.TRACER, provider: { useValue: tracer } },
     { token: SERVICES.METER, provider: { useValue: meter } },
-    { token: RESOURCE_NAME_ROUTER_SYMBOL, provider: { useFactory: resourceNameRouterFactory } },
-    { token: ANOTHER_RESOURECE_ROUTER_SYMBOL, provider: { useFactory: anotherResourceRouterFactory } },
     {
       token: 'onSignal',
       provider: {
