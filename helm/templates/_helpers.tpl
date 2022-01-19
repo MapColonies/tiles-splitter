@@ -90,6 +90,17 @@ Returns the cloud provider docker registry url from global if exists or from the
 {{- end -}}
 
 {{/*
+Returns the cloud provider image pull secret name from global if exists or from the chart's values
+*/}}
+{{- define "tiles-splitter.cloudProviderImagePullSecretName" -}}
+{{- if .Values.global.cloudProvider.imagePullSecretName }}
+    {{- .Values.global.cloudProvider.imagePullSecretName -}}
+{{- else if .Values.cloudProvider -}}
+    {{- .Values.cloudProvider.imagePullSecretName -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns the tracing url from global if exists or from the chart's values
 */}}
 {{- define "tiles-splitter.tracingUrl" -}}
