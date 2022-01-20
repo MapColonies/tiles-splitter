@@ -66,5 +66,6 @@
     "forcePathStyle": true,
     "sslEnabled": false,
     "virtualHosting": false
-  }
+  },
+  "overseerUrl": "http://localhost:8080"
 }

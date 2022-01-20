@@ -99,5 +99,6 @@
       "__name": "AWS_VIRTUAL_HOSTING",
       "__format": "boolean"
     }
-  }
+  },
+  "overseerUrl": "DISCRETE_OVERSEER_URL"
 }

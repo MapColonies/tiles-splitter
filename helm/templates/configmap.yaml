@@ -34,10 +34,10 @@ data:
   GENERATE_TILES_PROFILE: {{ .Values.env.generateTiles.profile | quote }}
   GENERATE_TILES_SRC_NODATA: {{ .Values.env.generateTiles.srcnodata | quote }}
   GENERATE_TILES_VERBOSE: {{ .Values.env.generateTiles.verbose | quote }}
-  QUEUE_JOB_MANAGER_BASE_URL: {{ .Values.env.queue.jobManagerBaseUrl | quote }}
-  QUEUE_HEART_BEAT_MANAGER_BASE_URL: {{ .Values.env.queue.heartbeatIntervalMs | quote }}
+  QUEUE_JOB_MANAGER_BASE_URL: {{ .Values.global.serviceUrls.jobManager | quote }}
+  QUEUE_HEART_BEAT_MANAGER_BASE_URL: {{ .Values.global.serviceUrls.heartbeatManager | quote }}
   QUEUE_DEQUEUE_INTERVAL_MS: {{ .Values.env.queue.dequeueIntervalMs | quote }}
-  QUEUE_HEART_BEAT_INTERVAL_MS: {{ .Values.env.queue.heartbeatManagerBaseUrl | quote }}
+  QUEUE_HEART_BEAT_INTERVAL_MS: {{ .Values.env.queue.heartbeatIntervalMs | quote }}
   QUEUE_JOB_TYPE: {{ .Values.env.queue.jobType | quote }}
   QUEUE_TASK_TYPE: {{ .Values.env.queue.taskType | quote }}
   STORAGE_PROVIDER: {{ .Values.env.storageProvider | quote }}
@@ -46,4 +46,5 @@ data:
   S3_FORCE_PATH_STYLE: {{ .Values.env.S3.forcePathStyle | quote }}
   AWS_HTTPS: {{ .Values.env.S3.sslEnabled | quote }}
   AWS_VIRTUAL_HOSTING: {{ .Values.env.S3.virtualHosting | quote }}
+  DISCRETE_OVERSEER_URL: {{ .Values.global.serviceUrls.discreteOverseer }}
 {{- end }}

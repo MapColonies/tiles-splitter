@@ -3,6 +3,11 @@ global:
   tracing: {}
   metrics: {}
   environment: {}
+  serviceUrls: 
+    jobManager: http://localhost:8082
+    heartbeatManager: http://localhost:8085
+    discreteOverseer: http://localhost:8080
+
 
 enabled: true
 environment: "development"
@@ -59,8 +64,6 @@ env:
     srcnodata: "0"
     verbose: true
   queue:
-    jobManagerBaseUrl: "http://localhost:8082"
-    heartbeatManagerBaseUrl: "http://localhost:8085"
     dequeueIntervalMs: 1000
     heartbeatIntervalMs: 300
     jobType: "Ingestion"

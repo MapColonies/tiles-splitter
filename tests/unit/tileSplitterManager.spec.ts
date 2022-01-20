@@ -8,6 +8,7 @@ import { configMock, init as initConfig, clear as clearConfig } from '../mocks/c
 import { registerExternalValues } from '../testContainerConfig';
 import { IGenerateTilesConfig, IS3Config, ITilesConfig, IVrtConfig } from '../../src/common/interfaces';
 import { GDALUtilities } from '../../src/gdalUtilities';
+import { OverseerClient } from '../../src/clients/overseerClient';
 
 let tileSplitterManager: TileSplitterManager;
 let dequeueStub: jest.SpyInstance;
@@ -17,9 +18,11 @@ let buildVrtStub: jest.SpyInstance;
 let generateTilesStub: jest.SpyInstance;
 let removeVrtFileStub: jest.SpyInstance;
 let removeS3TempFiles: jest.SpyInstance;
+let notifyTaskEndedStub: jest.SpyInstance;
 
 let container: DependencyContainer;
 let queueClient: QueueClient;
+let overseerClient: OverseerClient;
 
 describe('syncManager', () => {
   beforeEach(() => {
@@ -27,6 +30,8 @@ describe('syncManager', () => {
 
     container = registerExternalValues({ useChild: true });
     queueClient = container.resolve(QueueClient);
+    overseerClient = container.resolve(OverseerClient);
+
     const s3Config = configMock.get<IS3Config>('S3');
     const vrtConfig = configMock.get<IVrtConfig>('vrt');
     const generateTilesConfig = configMock.get<IGenerateTilesConfig>('generateTiles');
@@ -38,7 +43,8 @@ describe('syncManager', () => {
       vrtConfig,
       generateTilesConfig,
       tilesConfig,
-      queueClient
+      queueClient,
+      overseerClient
     );
 
     buildVrtStub = jest.spyOn(GDALUtilities.prototype, 'buildVrt').mockImplementation(async () => Promise.resolve());
@@ -47,6 +53,7 @@ describe('syncManager', () => {
     removeS3TempFiles = jest.spyOn(GDALUtilities.prototype, 'removeS3TempFiles').mockImplementation(async () => Promise.resolve());
     ackStubForTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'ack').mockImplementation(async () => Promise.resolve());
     rejectStubForTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'reject').mockImplementation(async () => Promise.resolve());
+    notifyTaskEndedStub = jest.spyOn(overseerClient, 'notifyTaskEnded').mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -83,6 +90,7 @@ describe('syncManager', () => {
       expect(ackStubForTileTasks).toHaveBeenCalledTimes(1);
       expect(rejectStubForTileTasks).toHaveBeenCalledTimes(0);
       expect(ackStubForTileTasks).toHaveBeenCalledWith(task.jobId, task.id);
+      expect(notifyTaskEndedStub).toHaveBeenCalledTimes(1);
     });
 
     it('should reject task due max attempts with buffers', async function () {
@@ -107,6 +115,7 @@ describe('syncManager', () => {
       expect(removeVrtFileStub).toHaveBeenCalledTimes(0);
       expect(rejectStubForTileTasks).toHaveBeenCalledTimes(1);
       expect(rejectStubForTileTasks).toHaveBeenCalledWith(task.jobId, task.id, false);
+      expect(notifyTaskEndedStub).toHaveBeenCalledTimes(1);
     });
 
     it('should reject task due max attempts with streams', async function () {
@@ -131,6 +140,7 @@ describe('syncManager', () => {
       expect(removeVrtFileStub).toHaveBeenCalledTimes(0);
       expect(rejectStubForTileTasks).toHaveBeenCalledTimes(1);
       expect(rejectStubForTileTasks).toHaveBeenCalledWith(task.jobId, task.id, false);
+      expect(notifyTaskEndedStub).toHaveBeenCalledTimes(1);
     });
   });
 });

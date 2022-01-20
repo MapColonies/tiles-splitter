@@ -6,6 +6,7 @@ import { SERVICES } from './common/constants';
 import { IConfig, IGenerateTilesConfig, IS3Config, ITaskParams, ITilesConfig, IVrtConfig } from './common/interfaces';
 import { GDALUtilities } from './gdalUtilities';
 import { StorageProviderType } from './common/enums';
+import { OverseerClient } from './clients/overseerClient';
 
 @singleton()
 export class TileSplitterManager {
@@ -19,7 +20,8 @@ export class TileSplitterManager {
     @inject(SERVICES.VRT_CONFIG) private readonly vrtConfig: IVrtConfig,
     @inject(SERVICES.GENERATE_TILES_CONFIG) private readonly generateTilesConfig: IGenerateTilesConfig,
     @inject(SERVICES.TILES_CONFIG) private readonly tilesConfig: ITilesConfig,
-    private readonly queueClient: QueueClient
+    private readonly queueClient: QueueClient,
+    private readonly overseerClient: OverseerClient
   ) {
     this.splitAttempts = this.config.get<number>('splitAttempts');
     this.storageProvider = this.config.get<string>('storageProvider');
@@ -44,7 +46,7 @@ export class TileSplitterManager {
           await gdalUtilities.buildVrt(tilesTask);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
-
+          await this.overseerClient.notifyTaskEnded(taskId, taskId);
           this.logger.info(`TaskId: ${tilesTask.id}, on jobId=${tilesTask.jobId} Completed`);
         } catch (error) {
           await this.queueClient.queueHandlerForTileSplittingTasks.reject(jobId, taskId, true, (error as Error).message);
@@ -56,6 +58,7 @@ export class TileSplitterManager {
         }
       } else {
         await this.queueClient.queueHandlerForTileSplittingTasks.reject(jobId, taskId, false);
+        await this.overseerClient.notifyTaskEnded(taskId, taskId);
       }
     }
     return Boolean(tilesTask);
