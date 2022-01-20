@@ -30,7 +30,7 @@ rasterCommon:
   jobManagement:
     ingestion:
       jobType: Ingestion
-      tillingTaskType: splitTilesSync
+      tillingTaskType: splitTiles
 
 enabled: true
 environment: "development"
