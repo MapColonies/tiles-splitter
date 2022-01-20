@@ -1,4 +1,4 @@
-{{- if and (eq (upper .Values.env.storageProvider) "FS") .Values.storage.internalPvc.create -}}
+{{- if and (eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS") .Values.storage.internalPvc.create -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
