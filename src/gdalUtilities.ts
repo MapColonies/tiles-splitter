@@ -20,17 +20,17 @@ export class GDALUtilities {
     private readonly vrtConfig: IVrtConfig,
     private readonly generateTilesConfig: IGenerateTilesConfig,
     private readonly queueClient: QueueClient,
-    private readonly task: ITaskResponse
+    private readonly task: ITaskResponse<ITaskParams>
   ) {
-    this.jobId = this.task.jobId;
+    this.jobId = this.task.jobId as string;
     this.taskId = this.task.id;
   }
 
-  public async buildVrt(task: ITaskResponse): Promise<void> {
-    const discreteId = (task.parameters as ITaskParams).discreteId;
-    const fileNamesList = (task.parameters as ITaskParams).fileNames;
-    const sourcesOriginDir = (task.parameters as ITaskParams).originDirectory;
-    const bbox = (task.parameters as ITaskParams).bbox;
+  public async buildVrt(task: ITaskResponse<ITaskParams>): Promise<void> {
+    const discreteId = task.parameters.discreteId;
+    const fileNamesList = task.parameters.fileNames;
+    const sourcesOriginDir = task.parameters.originDirectory;
+    const bbox = task.parameters.bbox;
 
     try {
       const vrtPath = this.getVrtFilePath(discreteId);
@@ -70,14 +70,14 @@ export class GDALUtilities {
     }
   }
 
-  public async generateTiles(task: ITaskResponse, tilesBasePath: string): Promise<void> {
-    const discreteId = (task.parameters as ITaskParams).discreteId;
-    const version = (task.parameters as ITaskParams).version;
-    const layerRelativePath = (task.parameters as ITaskParams).layerRelativePath;
+  public async generateTiles(task: ITaskResponse<ITaskParams>, tilesBasePath: string): Promise<void> {
+    const discreteId = task.parameters.discreteId;
+    const version = task.parameters.version;
+    const layerRelativePath = task.parameters.layerRelativePath;
     const tilesPath = join(tilesBasePath, layerRelativePath);
     const vrtPath = this.getVrtFilePath(discreteId);
-    const minZoom = (task.parameters as ITaskParams).minZoom;
-    const maxZoom = (task.parameters as ITaskParams).maxZoom;
+    const minZoom = task.parameters.minZoom;
+    const maxZoom = task.parameters.maxZoom;
     const zoomLevels = `${minZoom}-${maxZoom}`;
 
     try {
