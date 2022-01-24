@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/MapColonies/tiles-splitter/compare/v1.1.1...v1.1.2) (2022-01-24)
+
+
+### Bug Fixes
+
+* overseer status url ([#7](https://github.com/MapColonies/tiles-splitter/issues/7)) ([c94210b](https://github.com/MapColonies/tiles-splitter/commit/c94210bc5c649cee5c25bc53ecb8b4e347d3add2))
+
 ### [1.1.1](https://github.com/MapColonies/tiles-splitter/compare/v1.1.0...v1.1.1) (2022-01-24)
 
 
