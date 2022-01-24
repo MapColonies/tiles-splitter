@@ -38,7 +38,7 @@ spec:
       volumes:
       - name: ingestion-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.rasterCommon.storage.fs.ingestionSourcePvc }}
+          claimName: {{ .Values.rasterCommon.storage.fs.ingestionSourcePvc.name }}
     {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
       - name: tiles-storage
         persistentVolumeClaim:
