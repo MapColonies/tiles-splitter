@@ -10,7 +10,7 @@ export class OverseerClient extends HttpClient {
   }
 
   public async notifyTaskEnded(jobId: string, taskId: string): Promise<void> {
-    const url = `/tasks/${jobId}/${taskId}`;
+    const url = `/tasks/${jobId}/${taskId}/completed`;
     await this.post(url);
   }
 }
