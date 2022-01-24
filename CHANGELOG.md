@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/MapColonies/tiles-splitter/compare/v1.1.0...v1.1.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* helm volume name ([#5](https://github.com/MapColonies/tiles-splitter/issues/5)) ([f543c0f](https://github.com/MapColonies/tiles-splitter/commit/f543c0fd3f85d2b9c7231281fed7d7517a0c6fc5))
+* overseer status notification ([#6](https://github.com/MapColonies/tiles-splitter/issues/6)) ([0645c8f](https://github.com/MapColonies/tiles-splitter/commit/0645c8fa7d17cfa3d8642863dcf2ea5f73c9ec6e))
+
 ## [1.1.0](https://github.com/MapColonies/tiles-splitter/compare/v1.0.1...v1.1.0) (2022-01-24)
 
 
