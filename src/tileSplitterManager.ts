@@ -46,7 +46,7 @@ export class TileSplitterManager {
           await gdalUtilities.buildVrt(tilesTask);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
-          await this.overseerClient.notifyTaskEnded(taskId, taskId);
+          await this.overseerClient.notifyTaskEnded(jobId, taskId);
           this.logger.info(`TaskId: ${taskId}, on jobId=${jobId} Completed`);
         } catch (error) {
           await this.queueClient.queueHandlerForTileSplittingTasks.reject(jobId, taskId, true, (error as Error).message);
@@ -58,7 +58,7 @@ export class TileSplitterManager {
         }
       } else {
         await this.queueClient.queueHandlerForTileSplittingTasks.reject(jobId, taskId, false);
-        await this.overseerClient.notifyTaskEnded(taskId, taskId);
+        await this.overseerClient.notifyTaskEnded(jobId, taskId);
       }
     }
     return Boolean(tilesTask);
