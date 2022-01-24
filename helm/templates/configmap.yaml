@@ -21,7 +21,7 @@ data:
   {{ end }}
   SPLIT_ATTEMPTS: {{ .Values.env.splitAttempts | quote }}
   SOURCE_MOUNT_PATH: "/layerSources"
-  {{ if eq (upper .Values.env.storageProvider) "FS" }}
+  {{ if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
   TILES_PATH: "/app/tiles_outputs"
   {{ end }}
   VRT_OUTPUT_DIR_PATH: "/app/vrtOutputs"
@@ -34,16 +34,17 @@ data:
   GENERATE_TILES_PROFILE: {{ .Values.env.generateTiles.profile | quote }}
   GENERATE_TILES_SRC_NODATA: {{ .Values.env.generateTiles.srcnodata | quote }}
   GENERATE_TILES_VERBOSE: {{ .Values.env.generateTiles.verbose | quote }}
-  QUEUE_JOB_MANAGER_BASE_URL: {{ .Values.env.queue.jobManagerBaseUrl | quote }}
-  QUEUE_HEART_BEAT_MANAGER_BASE_URL: {{ .Values.env.queue.heartbeatIntervalMs | quote }}
+  QUEUE_JOB_MANAGER_BASE_URL: {{ .Values.rasterCommon.serviceUrls.jobManager | quote }}
+  QUEUE_HEART_BEAT_MANAGER_BASE_URL: {{ .Values.rasterCommon.serviceUrls.heartbeatManager | quote }}
   QUEUE_DEQUEUE_INTERVAL_MS: {{ .Values.env.queue.dequeueIntervalMs | quote }}
-  QUEUE_HEART_BEAT_INTERVAL_MS: {{ .Values.env.queue.heartbeatManagerBaseUrl | quote }}
-  QUEUE_JOB_TYPE: {{ .Values.env.queue.jobType | quote }}
-  QUEUE_TASK_TYPE: {{ .Values.env.queue.taskType | quote }}
-  STORAGE_PROVIDER: {{ .Values.env.storageProvider | quote }}
-  AWS_S3_ENDPOINT: {{ .Values.env.S3.endpoint | quote }}
-  S3_BUCKET: {{ .Values.env.S3.bucket | quote }}
-  S3_FORCE_PATH_STYLE: {{ .Values.env.S3.forcePathStyle | quote }}
-  AWS_HTTPS: {{ .Values.env.S3.sslEnabled | quote }}
-  AWS_VIRTUAL_HOSTING: {{ .Values.env.S3.virtualHosting | quote }}
+  QUEUE_HEART_BEAT_INTERVAL_MS: {{ .Values.env.queue.heartbeatIntervalMs | quote }}
+  QUEUE_JOB_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.jobType | quote }}
+  QUEUE_TASK_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.tillingTaskType | quote }}
+  STORAGE_PROVIDER: {{ .Values.rasterCommon.storage.tilesStorageProvider | quote }}
+  AWS_S3_ENDPOINT: {{ .Values.rasterCommon.storage.S3.endpoint | quote }}
+  S3_BUCKET: {{ .Values.rasterCommon.storage.S3.tilesBucket | quote }}
+  S3_FORCE_PATH_STYLE: {{ .Values.rasterCommon.storage.S3.forcePathStyle | quote }}
+  AWS_HTTPS: {{ .Values.rasterCommon.storage.S3.sslEnabled | quote }}
+  AWS_VIRTUAL_HOSTING: {{ .Values.rasterCommon.storage.S3.virtualHosting | quote }}
+  DISCRETE_OVERSEER_URL: {{ .Values.rasterCommon.serviceUrls.discreteOverseer | quote }}
 {{- end }}

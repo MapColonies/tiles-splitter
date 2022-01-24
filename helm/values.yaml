@@ -4,6 +4,34 @@ global:
   metrics: {}
   environment: {}
 
+rasterCommon:
+  serviceUrls: 
+    jobManager: http://localhost:8082
+    heartbeatManager: http://localhost:8085
+    discreteOverseer: http://localhost:8080
+  
+  storage:
+    tilesStorageProvider: 'FS'
+    fs:
+      ingestionSourcePvc:
+        name: ingestion-source-pvc
+        subPath: ingestion-source
+      tilesPvc:
+        name: "internal-pvc"
+        tilesSubPath: tiles
+    S3:
+      endpoint: "http://localhost:9000"
+      tilesBucket: "mapping-images"
+      forcePathStyle: true
+      sslEnabled: false
+      virtualHosting: false
+      secretName: raster-tiles-s3-secret
+  
+  jobManagement:
+    ingestion:
+      jobType: Ingestion
+      tillingTaskType: splitTiles
+
 enabled: true
 environment: "development"
 replicaCount: 1
@@ -25,12 +53,18 @@ image:
 storage:
   ingestionSourcePvc:
     enabled: true
-    name: ingestion-source-pvc
-    subPath: ingestion-source
   internalPvc:
-    create: false
-    name: "internal-pvc"
-    tilesSubPath: tiles
+    create: false #for local deployment only
+  internalPv:
+    name: local-tiles-pv
+    directory: '/tiles' #tiles hostPatch
+
+
+S3:
+  secret:
+    createSecret: false # secret should be created on higher level for deployments with multiple services
+    accessKeyId: # used only when creating secret
+    secretAccessKey: # used only when creating secret
 
 
 env:
@@ -59,24 +93,9 @@ env:
     srcnodata: "0"
     verbose: true
   queue:
-    jobManagerBaseUrl: "http://localhost:8082"
-    heartbeatManagerBaseUrl: "http://localhost:8085"
     dequeueIntervalMs: 1000
     heartbeatIntervalMs: 300
-    jobType: "Ingestion"
-    taskType: "splitTilesSync"
-  storageProvider: "FS"
-  S3:
-    endpoint: "http://localhost:9000"
-    bucket: "mapping-images"
-    forcePathStyle: true
-    sslEnabled: false
-    virtualHosting: false
-    secret:
-      name: raster-tiles-s3-secret
-      createSecret: false # secret should be created on higher level for deployments with multiple services
-      accessKeyId: # used only when creating secret
-      secretAccessKey: # used only when creating secret
+  
 resources:
   enabled: true
   value:

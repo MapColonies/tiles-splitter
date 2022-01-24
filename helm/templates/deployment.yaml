@@ -38,11 +38,11 @@ spec:
       volumes:
       - name: ingestion-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.ingestionSourcePvc.name }}
-    {{- if eq (upper .Values.env.storageProvider) "FS" }}
+          claimName: {{ .Values.rasterCommon.storage.fs.ingestionSourcePvc }}
+    {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
       - name: tiles-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.storage.internalPvc.name }}
+          claimName: {{ .Values.rasterCommon.storage.fs.tilesPvc.name }}
     {{- end }}
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
@@ -56,16 +56,16 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
-            {{- if eq (upper .Values.env.storageProvider) "S3" }}
+            {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "S3" }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.env.S3.secret.name }}
+                  name: {{ .Values.rasterCommon.storage.S3.secretName }}
                   key: accessKeyId
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.env.S3.secret.name }}
+                  name: {{ .Values.rasterCommon.storage.S3.secretName }}
                   key: secretAccessKey
             {{- end }}
           envFrom:
@@ -83,10 +83,10 @@ spec:
           volumeMounts:
             - name: ingestion-storage
               mountPath: /layerSources
-            {{- if eq (upper .Values.env.storageProvider) "FS" }}
+            {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
             - name: tiles-storage
               mountPath: /app/tiles_outputs
-              subPath: tiles
+              subPath: {{ .Values.rasterCommon.storage.fs.tilesPvc.tilesSubPath }}
             {{- end }}
           {{- if .Values.resources.enabled }}
           resources:
