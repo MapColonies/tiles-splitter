@@ -85,7 +85,7 @@ env:
   vrt:
     nodata: "0"
     outputSRS: "EPSG:4326"
-    resampling: "average"
+    resampling: "bilinear"
     addAlpha: true
   generateTiles:
     resampling: "average"

@@ -32,7 +32,7 @@
     "sourcesListFilePath": "/app/vrtOutputs/files.txt",
     "nodata": "0",
     "outputSRS": "EPSG:4326",
-    "resampling": "average",
+    "resampling": "bilinear",
     "addAlpha": true
   },
   "generateTiles": {
