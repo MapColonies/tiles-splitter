@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/MapColonies/tiles-splitter/compare/v1.1.3...v1.1.4) (2022-01-25)
+
+
+### Bug Fixes
+
+* added missing gdal configs ([#9](https://github.com/MapColonies/tiles-splitter/issues/9)) ([168a1bf](https://github.com/MapColonies/tiles-splitter/commit/168a1bf4da23be3bc277ab0f7f1d28306d9d69a0))
+
 ### [1.1.3](https://github.com/MapColonies/tiles-splitter/compare/v1.1.2...v1.1.3) (2022-01-25)
 
 ### [1.1.2](https://github.com/MapColonies/tiles-splitter/compare/v1.1.1...v1.1.2) (2022-01-24)
