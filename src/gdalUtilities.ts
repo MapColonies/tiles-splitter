@@ -100,7 +100,8 @@ export class GDALUtilities {
         '-a', // src no data value
         this.generateTilesConfig.srcnodata,
         '--tmscompatible', // tiling scheme (2:1)
-        '--no-kml', // ingore kml files
+        '--no-kml', // ignore kml files
+        '--exclude', // ignores empty tiles
         vrtPath, // input file path
         tilesPath, // tiles outhput path
       ];
