@@ -8,7 +8,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM osgeo/gdal:alpine-normal-3.2.0 as production
+FROM osgeo/gdal:alpine-normal-3.4.1 as production
 ENV CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE 'YES'
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node

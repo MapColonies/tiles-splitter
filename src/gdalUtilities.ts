@@ -11,6 +11,9 @@ import { QueueClient } from './clients/queueClient';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TransformCallback = (error?: Error | null, data?: any) => void;
 
+// offset of less then quoter pixel size of zoom 23
+const BBOX_START_OFFSET = 0.00000002;
+
 export class GDALUtilities {
   private readonly jobId: string;
   private readonly taskId: string;
@@ -36,8 +39,10 @@ export class GDALUtilities {
       const vrtPath = this.getVrtFilePath(discreteId);
       // create text file with the included file names for vrt the creation
       this.createFileNamesList(fileNamesList, sourcesOriginDir, this.vrtConfig.sourcesListFilePath);
-      const minX = bbox[0];
-      const minY = bbox[1];
+      //is bbox is on tile border gdal generate empty tile outside of the start border.
+      //this prevent the generation of those empty tiles and therefore preventing them from overriding valid tiles
+      const minX = bbox[0] + BBOX_START_OFFSET;
+      const minY = bbox[1] + BBOX_START_OFFSET;
       const maxX = bbox[2];
       const maxY = bbox[3];
 
@@ -95,7 +100,8 @@ export class GDALUtilities {
         '-a', // src no data value
         this.generateTilesConfig.srcnodata,
         '--tmscompatible', // tiling scheme (2:1)
-        '--no-kml', // ingore kml files
+        '--no-kml', // ignore kml files
+        '--exclude', // ignores empty tiles
         vrtPath, // input file path
         tilesPath, // tiles outhput path
       ];
