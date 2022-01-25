@@ -59,9 +59,12 @@ export class GDALUtilities {
         '-r', // resampling
         this.vrtConfig.resampling,
         '-input_file_list', // input text file path
-        this.vrtConfig.sourcesListFilePath,
-        vrtPath, // output path
       ];
+      if (this.vrtConfig.addAlpha) {
+        args.push('-addalpha');
+      }
+      args.push(this.vrtConfig.sourcesListFilePath);
+      args.push(vrtPath);
 
       this.logger.debug(`creating VRT file in path: ${vrtPath}`);
       await $`gdalbuildvrt ${args}`;

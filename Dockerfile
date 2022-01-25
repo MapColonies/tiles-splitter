@@ -10,6 +10,7 @@ RUN npm run build
 
 FROM osgeo/gdal:alpine-normal-3.4.1 as production
 ENV CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE 'YES'
+ENV GDAL_PAM_ENABLED 'NO'
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node
 
