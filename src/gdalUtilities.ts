@@ -46,7 +46,7 @@ export class GDALUtilities {
       const maxX = bbox[2];
       const maxY = bbox[3];
 
-      const args = [
+      let args = [
         '-a_srs', // output srs
         this.vrtConfig.outputSRS,
         '-te', // bbox
@@ -58,13 +58,16 @@ export class GDALUtilities {
         this.vrtConfig.nodata,
         '-r', // resampling
         this.vrtConfig.resampling,
-        '-input_file_list', // input text file path
       ];
       if (this.vrtConfig.addAlpha) {
         args.push('-addalpha');
       }
-      args.push(this.vrtConfig.sourcesListFilePath);
-      args.push(vrtPath);
+      args = [
+        ...args,
+        '-input_file_list', // input text file path
+        this.vrtConfig.sourcesListFilePath,
+        vrtPath,
+      ];
 
       this.logger.debug(`creating VRT file in path: ${vrtPath}`);
       await $`gdalbuildvrt ${args}`;
