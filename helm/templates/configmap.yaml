@@ -41,10 +41,10 @@ data:
   QUEUE_JOB_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.jobType | quote }}
   QUEUE_TASK_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.tillingTaskType | quote }}
   STORAGE_PROVIDER: {{ .Values.rasterCommon.storage.tilesStorageProvider | quote }}
-  AWS_S3_ENDPOINT: {{ .Values.rasterCommon.storage.S3.endpoint | quote }}
-  S3_BUCKET: {{ .Values.rasterCommon.storage.S3.tilesBucket | quote }}
-  S3_FORCE_PATH_STYLE: {{ .Values.rasterCommon.storage.S3.forcePathStyle | quote }}
-  AWS_HTTPS: {{ .Values.rasterCommon.storage.S3.sslEnabled | quote }}
-  AWS_VIRTUAL_HOSTING: {{ .Values.rasterCommon.storage.S3.virtualHosting | quote }}
+  AWS_S3_ENDPOINT: {{ .Values.rasterCommon.storage.s3.endpoint | quote }}
+  S3_BUCKET: {{ .Values.rasterCommon.storage.s3.tilesBucket | quote }}
+  S3_FORCE_PATH_STYLE: {{ .Values.rasterCommon.storage.s3.forcePathStyle | quote }}
+  AWS_HTTPS: {{ .Values.rasterCommon.storage.s3.sslEnabled | quote }}
+  AWS_VIRTUAL_HOSTING: {{ .Values.rasterCommon.storage.s3.virtualHosting | quote }}
   DISCRETE_OVERSEER_URL: {{ .Values.rasterCommon.serviceUrls.discreteOverseer | quote }}
 {{- end }}
