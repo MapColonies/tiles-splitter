@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/MapColonies/tiles-splitter/compare/v1.1.4...v1.1.5) (2022-01-26)
+
+
+### Bug Fixes
+
+* vrt command ([#10](https://github.com/MapColonies/tiles-splitter/issues/10)) ([59465cf](https://github.com/MapColonies/tiles-splitter/commit/59465cf96828246197f08fe7358451e72048ae0a))
+
 ### [1.1.4](https://github.com/MapColonies/tiles-splitter/compare/v1.1.3...v1.1.4) (2022-01-25)
 
 
