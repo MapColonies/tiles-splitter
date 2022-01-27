@@ -90,10 +90,18 @@ export class GDALUtilities {
     const minZoom = task.parameters.minZoom;
     const maxZoom = task.parameters.maxZoom;
     const zoomLevels = `${minZoom}-${maxZoom}`;
+    let active = true;
 
     try {
       const outputStream = new Transform({
-        transform: this.gdalProgressFunc,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        transform: (chunk: any, encoding: BufferEncoding, callback: TransformCallback): void => {
+          if (active) {
+            this.gdalProgressFunc(chunk, encoding, callback);
+          } else {
+            callback();
+          }
+        },
       });
 
       const args = [
@@ -116,6 +124,7 @@ export class GDALUtilities {
       const cmd = $`gdal2tiles.py ${args}`;
       cmd.stdout.pipe(outputStream);
       await cmd;
+      active = false;
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       this.logger.error(`failed to generate tiles: ${error}`);
@@ -164,7 +173,7 @@ export class GDALUtilities {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly gdalProgressFunc = async (chunk: any, encoding: BufferEncoding, callback: TransformCallback): Promise<void> => {
+  private readonly gdalProgressFunc = (chunk: any, encoding: BufferEncoding, callback: TransformCallback): void => {
     let gdalOutput = '';
     let lastProgressPercent = 0;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -181,8 +190,11 @@ export class GDALUtilities {
     if (currentProgressPercent !== lastProgressPercent && outputArr.length) {
       lastProgressPercent = currentProgressPercent;
       const percentNum = lastProgressPercent;
-      await this.queueClient.queueHandlerForTileSplittingTasks.updateProgress(this.jobId, this.taskId, percentNum);
+      void this.queueClient.queueHandlerForTileSplittingTasks.updateProgress(this.jobId, this.taskId, percentNum).then(() => {
+        callback();
+      });
+    } else {
+      callback();
     }
-    callback();
   };
 }
