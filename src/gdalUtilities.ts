@@ -95,7 +95,7 @@ export class GDALUtilities {
     try {
       const outputStream = new Transform({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        transform: (chunk: any, encoding: BufferEncoding, callback: TransformCallback): Promise<void> => {
+        transform: (chunk: any, encoding: BufferEncoding, callback: TransformCallback): void => {
           if (active) {
             this.gdalProgressFunc(chunk, encoding, callback);
           } else {
