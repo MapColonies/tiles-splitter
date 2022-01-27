@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.6](https://github.com/MapColonies/tiles-splitter/compare/v1.1.5...v1.1.6) (2022-01-27)
+
+
+### Bug Fixes
+
+* prevented task post complation updates ([#12](https://github.com/MapColonies/tiles-splitter/issues/12)) ([1475394](https://github.com/MapColonies/tiles-splitter/commit/147539491331d21609cbf1ad1bf27503a2abbf3b))
+* updated s3 config to match  umbrella ([#11](https://github.com/MapColonies/tiles-splitter/issues/11)) ([d03c2f4](https://github.com/MapColonies/tiles-splitter/commit/d03c2f4cd140acd1a0422c085c6354bcf89e3fb0))
+
 ### [1.1.5](https://github.com/MapColonies/tiles-splitter/compare/v1.1.4...v1.1.5) (2022-01-26)
 
 
