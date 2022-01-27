@@ -20,7 +20,7 @@ rasterCommon:
         name: "internal-pvc"
         tilesSubPath: tiles
     s3:
-      endpoint: "http://localhost:9000"
+      endpointUrl: "http://localhost:9000"
       tilesBucket: "mapping-images"
       forcePathStyle: true
       sslEnabled: false

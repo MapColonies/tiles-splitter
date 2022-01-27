@@ -41,7 +41,7 @@ data:
   QUEUE_JOB_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.jobType | quote }}
   QUEUE_TASK_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.tillingTaskType | quote }}
   STORAGE_PROVIDER: {{ .Values.rasterCommon.storage.tilesStorageProvider | quote }}
-  AWS_S3_ENDPOINT: {{ .Values.rasterCommon.storage.s3.endpoint | quote }}
+  AWS_S3_ENDPOINT: {{ .Values.rasterCommon.storage.s3.endpointUrl | quote }}
   S3_BUCKET: {{ .Values.rasterCommon.storage.s3.tilesBucket | quote }}
   S3_FORCE_PATH_STYLE: {{ .Values.rasterCommon.storage.s3.forcePathStyle | quote }}
   AWS_HTTPS: {{ .Values.rasterCommon.storage.s3.sslEnabled | quote }}
