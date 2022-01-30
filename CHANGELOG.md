@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.7](https://github.com/MapColonies/tiles-splitter/compare/v1.1.6...v1.1.7) (2022-01-30)
+
+
+### Bug Fixes
+
+* helm s3 configs ([#13](https://github.com/MapColonies/tiles-splitter/issues/13)) ([cb1edb1](https://github.com/MapColonies/tiles-splitter/commit/cb1edb11e0357900a662e92592520ec6eccec1a0))
+
 ### [1.1.6](https://github.com/MapColonies/tiles-splitter/compare/v1.1.5...v1.1.6) (2022-01-27)
 
 
