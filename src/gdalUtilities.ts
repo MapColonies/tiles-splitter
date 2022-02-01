@@ -61,7 +61,7 @@ export class GDALUtilities {
       ];
 
       if (this.vrtConfig.useBandCount) {
-        const inputBandCount = this.vrtConfig.inputBandCount
+        const inputBandCount = this.vrtConfig.inputBandCount;
         for (let band = 1; band <= inputBandCount; band++) {
           args.push('-b', band);
         }
