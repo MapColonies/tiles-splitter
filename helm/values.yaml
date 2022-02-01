@@ -87,6 +87,8 @@ env:
     outputSRS: "EPSG:4326"
     resampling: "bilinear"
     addAlpha: true
+    useBandCount: true
+    inputBandCount: 3
   generateTiles:
     resampling: "average"
     profile: "geodetic"

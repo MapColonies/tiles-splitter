@@ -56,6 +56,14 @@
     "addAlpha": {
       "__name": "VRT_ADD_ALPHA",
       "__format": "boolean"
+    },
+    "useBandCount": {
+      "__name": "VRT_USE_BAND_COUNT",
+      "__format": "boolean"
+    },
+    "inputBandCount": {
+      "__name": "VRT_INPUT_BAND_COUNT",
+      "__format": "number"
     }
   },
   "generateTiles": {

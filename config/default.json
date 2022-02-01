@@ -34,7 +34,8 @@
     "outputSRS": "EPSG:4326",
     "resampling": "bilinear",
     "addAlpha": true,
-    "bandsCount": 3
+    "useBandCount": true,
+    "inputBandCount": 3
   },
   "generateTiles": {
     "resampling": "average",

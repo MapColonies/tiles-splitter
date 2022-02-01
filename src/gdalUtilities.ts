@@ -45,7 +45,7 @@ export class GDALUtilities {
       const minY = bbox[1] + BBOX_START_OFFSET;
       const maxX = bbox[2];
       const maxY = bbox[3];
-      const bandCount = `BAND_COUNT=${this.vrtConfig.bandsCount}`
+
       let args = [
         '-a_srs', // output srs
         this.vrtConfig.outputSRS,
@@ -58,9 +58,14 @@ export class GDALUtilities {
         this.vrtConfig.nodata,
         '-r', // resampling
         this.vrtConfig.resampling,
-        '-oo', // open options
-        bandCount
       ];
+
+      if (this.vrtConfig.useBandCount) {
+        const inputBandCount = this.vrtConfig.inputBandCount
+        for (let band = 1; band <= inputBandCount; band++) {
+          args.push('-b', band);
+        }
+      }
       if (this.vrtConfig.addAlpha) {
         args.push('-addalpha');
       }

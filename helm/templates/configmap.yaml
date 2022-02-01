@@ -30,6 +30,8 @@ data:
   VRT_OUTPUT_SRS: {{ .Values.env.vrt.outputSRS | quote }}
   VRT_RESAMPLING: {{ .Values.env.vrt.resampling | quote }}
   VRT_ADD_ALPHA: {{ .Values.env.vrt.addAlpha | quote }}
+  VRT_USE_BAND_COUNT: {{ .Values.env.vrt.useBandCount | quote }}
+  VRT_INPUT_BAND_COUNT: {{ .Values.env.vrt.inputBandCount | quote }}
   GENERATE_TILES_RESMAPLING: {{ .Values.env.generateTiles.resampling | quote }}
   GENERATE_TILES_PROFILE: {{ .Values.env.generateTiles.profile | quote }}
   GENERATE_TILES_SRC_NODATA: {{ .Values.env.generateTiles.srcnodata | quote }}
