@@ -54,6 +54,8 @@ export interface IVrtConfig {
   outputSRS: string;
   resampling: string;
   addAlpha: boolean;
+  useBandCount: boolean;
+  inputBandCount: number;
 }
 
 export interface IGenerateTilesConfig {

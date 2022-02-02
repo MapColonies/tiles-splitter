@@ -59,9 +59,17 @@ export class GDALUtilities {
         '-r', // resampling
         this.vrtConfig.resampling,
       ];
+
+      if (this.vrtConfig.useBandCount) {
+        const inputBandCount = this.vrtConfig.inputBandCount;
+        for (let band = 1; band <= inputBandCount; band++) {
+          args.push('-b', band);
+        }
+      }
       if (this.vrtConfig.addAlpha) {
         args.push('-addalpha');
       }
+
       args = [
         ...args,
         '-input_file_list', // input text file path
