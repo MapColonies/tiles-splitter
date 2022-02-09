@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://github.com/MapColonies/tiles-splitter/compare/v1.1.7...v1.1.8) (2022-02-09)
+
+
+### Bug Fixes
+
+* adapt band count for vrt ([#14](https://github.com/MapColonies/tiles-splitter/issues/14)) ([1470a0b](https://github.com/MapColonies/tiles-splitter/commit/1470a0b18779f4c955a0f15cc5e1a1c89a75d416))
+
 ### [1.1.7](https://github.com/MapColonies/tiles-splitter/compare/v1.1.6...v1.1.7) (2022-01-30)
 
 
