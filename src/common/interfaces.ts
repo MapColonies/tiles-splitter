@@ -46,7 +46,7 @@ export interface ITaskParams {
   bbox: number[];
 }
 
-export interface IJobParams{
+export interface IJobParams {
   fileNames: string[];
 }
 

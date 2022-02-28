@@ -29,7 +29,7 @@ export class GDALUtilities {
     this.taskId = this.task.id;
   }
 
-  public async buildVrt(task: ITaskResponse<ITaskParams>,files: string[]): Promise<void> {
+  public async buildVrt(task: ITaskResponse<ITaskParams>, files: string[]): Promise<void> {
     const discreteId = task.parameters.discreteId;
     const fileNamesList = files;
     const sourcesOriginDir = task.parameters.originDirectory;
