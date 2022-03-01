@@ -56,8 +56,6 @@ export class GDALUtilities {
         maxY,
         '-vrtnodata', // no data value
         this.vrtConfig.nodata,
-        '-r', // resampling
-        this.vrtConfig.resampling,
       ];
 
       if (this.vrtConfig.useBandCount) {

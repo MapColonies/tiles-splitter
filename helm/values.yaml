@@ -85,12 +85,11 @@ env:
   vrt:
     nodata: "0"
     outputSRS: "EPSG:4326"
-    resampling: "bilinear"
     addAlpha: true
     useBandCount: true
     inputBandCount: 3
   generateTiles:
-    resampling: "average"
+    resampling: "bilinear"
     profile: "geodetic"
     srcnodata: "0"
     verbose: true

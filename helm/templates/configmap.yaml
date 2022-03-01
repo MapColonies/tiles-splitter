@@ -28,7 +28,6 @@ data:
   VRT_SOURCES_LIST_FILE_PATH: "/app/vrtOutputs/files.txt"
   VRT_NODATA: {{ .Values.env.vrt.nodata | quote}}
   VRT_OUTPUT_SRS: {{ .Values.env.vrt.outputSRS | quote }}
-  VRT_RESAMPLING: {{ .Values.env.vrt.resampling | quote }}
   VRT_ADD_ALPHA: {{ .Values.env.vrt.addAlpha | quote }}
   VRT_USE_BAND_COUNT: {{ .Values.env.vrt.useBandCount | quote }}
   VRT_INPUT_BAND_COUNT: {{ .Values.env.vrt.inputBandCount | quote }}
