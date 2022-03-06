@@ -39,12 +39,15 @@ export interface IS3Config {
 export interface ITaskParams {
   discreteId: string;
   version: string;
-  fileNames: string[];
   originDirectory: string;
   layerRelativePath: string;
   minZoom: number;
   maxZoom: number;
   bbox: number[];
+}
+
+export interface IJobParams {
+  fileNames: string[];
 }
 
 export interface IVrtConfig {

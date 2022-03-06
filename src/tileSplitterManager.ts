@@ -3,7 +3,7 @@ import { Logger } from '@map-colonies/js-logger';
 import { inject, singleton } from 'tsyringe';
 import { QueueClient } from './clients/queueClient';
 import { SERVICES } from './common/constants';
-import { IConfig, IGenerateTilesConfig, IS3Config, ITaskParams, ITilesConfig, IVrtConfig } from './common/interfaces';
+import { IConfig, IGenerateTilesConfig, IJobParams, IS3Config, ITaskParams, ITilesConfig, IVrtConfig } from './common/interfaces';
 import { GDALUtilities } from './gdalUtilities';
 import { StorageProviderType } from './common/enums';
 import { OverseerClient } from './clients/overseerClient';
@@ -30,6 +30,7 @@ export class TileSplitterManager {
   public async handleSplitTilesTask(): Promise<boolean> {
     const tilesTask = await this.queueClient.queueHandlerForTileSplittingTasks.dequeue<ITaskParams>();
     if (tilesTask) {
+      const job = await this.queueClient.jobsClient.getJob<IJobParams, ITaskParams>(tilesTask.jobId as string);
       const gdalUtilities = new GDALUtilities(this.logger, this.vrtConfig, this.generateTilesConfig, this.queueClient, tilesTask);
       const jobId = tilesTask.jobId as string;
       const taskId = tilesTask.id;
@@ -43,7 +44,7 @@ export class TileSplitterManager {
         try {
           this.logger.info(`Running split tiles task for taskId: ${taskId}, on jobId=${jobId}, attempt: ${attempts}`);
 
-          await gdalUtilities.buildVrt(tilesTask);
+          await gdalUtilities.buildVrt(tilesTask, job?.parameters.fileNames as string[]);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
           await this.overseerClient.notifyTaskEnded(jobId, taskId);
