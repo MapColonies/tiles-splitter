@@ -1,6 +1,6 @@
 {
   "name": "tiles-splitter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Split tiles worker service",
   "main": "./src/index.ts",
   "scripts": {

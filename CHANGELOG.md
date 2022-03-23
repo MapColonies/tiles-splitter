@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/MapColonies/tiles-splitter/compare/v1.2.0...v1.2.1) (2022-03-23)
+
+
+### Bug Fixes
+
+* removed vrt resampling and fixed bbox coordinates ([#17](https://github.com/MapColonies/tiles-splitter/issues/17)) ([32cdb16](https://github.com/MapColonies/tiles-splitter/commit/32cdb16d3ac420290dbe76bda2d3bc168e1b42e7))
+
 ## [1.2.0](https://github.com/MapColonies/tiles-splitter/compare/v1.1.8...v1.2.0) (2022-03-06)
 
 ### [1.1.8](https://github.com/MapColonies/tiles-splitter/compare/v1.1.7...v1.1.8) (2022-02-09)
