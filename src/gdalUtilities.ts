@@ -43,8 +43,8 @@ export class GDALUtilities {
       //this prevent the generation of those empty tiles and therefore preventing them from overriding valid tiles
       const minX = bbox[0] + BBOX_START_OFFSET;
       const minY = bbox[1] + BBOX_START_OFFSET;
-      const maxX = bbox[2];
-      const maxY = bbox[3];
+      const maxX = bbox[2] - BBOX_START_OFFSET;
+      const maxY = bbox[3] - BBOX_START_OFFSET;
 
       let args = [
         '-a_srs', // output srs
@@ -54,10 +54,8 @@ export class GDALUtilities {
         minY,
         maxX,
         maxY,
-        '-vrtnodata', // no data value
+        '-srcnodata', // no data value
         this.vrtConfig.nodata,
-        '-r', // resampling
-        this.vrtConfig.resampling,
       ];
 
       if (this.vrtConfig.useBandCount) {
