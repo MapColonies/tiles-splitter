@@ -46,7 +46,7 @@ spec:
     {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
       - name: tiles-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.rasterCommon.storage.fs.tilesPvc.name }}
+          claimName: {{ .Values.rasterCommon.storage.fs.internalPvc.name }}
     {{- end }}
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
@@ -90,7 +90,7 @@ spec:
             {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
             - name: tiles-storage
               mountPath: /app/tiles_outputs
-              subPath: {{ .Values.rasterCommon.storage.fs.tilesPvc.tilesSubPath }}
+              subPath: {{ .Values.rasterCommon.storage.fs.internalPvc.tilesSubPath }}
             {{- end }}
           {{- if .Values.resources.enabled }}
           resources:

@@ -16,7 +16,7 @@ rasterCommon:
       ingestionSourcePvc:
         name: ingestion-source-pvc
         subPath: ingestion-source
-      tilesPvc:
+      internalPvc:
         name: "internal-pvc"
         tilesSubPath: tiles
     s3:
