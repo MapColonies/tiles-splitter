@@ -48,6 +48,8 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.rasterCommon.storage.fs.internalPvc.name }}
     {{- end }}
+      nodeSelector:
+        knownNode: eastus-1-node-1
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
           {{- with .Values.image }}
