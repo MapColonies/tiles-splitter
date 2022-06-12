@@ -26,11 +26,11 @@ rasterCommon:
       sslEnabled: false
       virtualHosting: false
       secretName: raster-tiles-s3-secret
-  
   jobManagement:
     ingestion:
-      jobType: Ingestion
-      tillingTaskType: splitTiles
+      new: 
+        jobType: Ingestion_New
+        splitTilesTaskType: tilesSplitting
 
 enabled: true
 environment: "development"
