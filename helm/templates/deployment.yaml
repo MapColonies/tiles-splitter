@@ -87,6 +87,7 @@ spec:
           volumeMounts:
             - name: ingestion-storage
               mountPath: /layerSources
+              subPath: {{ .Values.rasterCommon.storage.fs.ingestionSourcePvc.subPath }}
             {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
             - name: tiles-storage
               mountPath: /app/tiles_outputs
