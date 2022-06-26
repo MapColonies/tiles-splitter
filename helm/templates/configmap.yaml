@@ -40,8 +40,8 @@ data:
   QUEUE_HEART_BEAT_MANAGER_BASE_URL: {{ .Values.rasterCommon.serviceUrls.heartbeatManager | quote }}
   QUEUE_DEQUEUE_INTERVAL_MS: {{ .Values.env.queue.dequeueIntervalMs | quote }}
   QUEUE_HEART_BEAT_INTERVAL_MS: {{ .Values.env.queue.heartbeatIntervalMs | quote }}
-  QUEUE_JOB_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.jobType | quote }}
-  QUEUE_TASK_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.tillingTaskType | quote }}
+  QUEUE_JOB_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.new.jobType | quote }}
+  QUEUE_TASK_TYPE: {{ .Values.rasterCommon.jobManagement.ingestion.new.splitTilesTaskType | quote }}
   STORAGE_PROVIDER: {{ .Values.rasterCommon.storage.tilesStorageProvider | quote }}
   AWS_S3_ENDPOINT: {{ .Values.rasterCommon.storage.s3.endpointUrl | quote }}
   S3_BUCKET: {{ .Values.rasterCommon.storage.s3.tilesBucket | quote }}
