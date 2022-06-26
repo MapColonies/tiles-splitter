@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/MapColonies/tiles-splitter/compare/v1.2.2...v1.2.3) (2022-06-26)
+
+
+### Bug Fixes
+
+* new azure token ([#22](https://github.com/MapColonies/tiles-splitter/issues/22)) ([903b26b](https://github.com/MapColonies/tiles-splitter/commit/903b26b7d65ed19fd12993c3e5cd7057ab6facc5))
+
 ### [1.2.2](https://github.com/MapColonies/tiles-splitter/compare/v1.2.1...v1.2.2) (2022-06-26)
 
 
