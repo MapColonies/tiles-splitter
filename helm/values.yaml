@@ -5,6 +5,7 @@ global:
   environment: {}
 
 rasterCommon:
+  useNodeAffinity: false
   serviceUrls: 
     jobManager: http://localhost:8082
     heartbeatManager: http://localhost:8085
