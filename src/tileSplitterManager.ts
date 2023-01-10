@@ -46,6 +46,8 @@ export class TileSplitterManager {
 
           await gdalUtilities.buildVrt(tilesTask, job?.parameters.fileNames as string[]);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);
+          const taskCompletePercentage = 100;
+          await this.queueClient.queueHandlerForTileSplittingTasks.updateProgress(jobId, taskId, taskCompletePercentage);
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
           await this.overseerClient.notifyTaskEnded(jobId, taskId);
           this.logger.info(`TaskId: ${taskId}, on jobId=${jobId} Completed`);
