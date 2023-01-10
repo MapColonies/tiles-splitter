@@ -53,7 +53,9 @@ describe('syncManager', () => {
     removeVrtFileStub = jest.spyOn(GDALUtilities.prototype, 'removeVrtFile').mockImplementation(async () => Promise.resolve());
     removeS3TempFiles = jest.spyOn(GDALUtilities.prototype, 'removeS3TempFiles').mockImplementation(async () => Promise.resolve());
     ackStubForTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'ack').mockImplementation(async () => Promise.resolve());
-    updateProgressTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'updateProgress').mockImplementation(async () => Promise.resolve());
+    updateProgressTileTasks = jest
+      .spyOn(queueClient.queueHandlerForTileSplittingTasks, 'updateProgress')
+      .mockImplementation(async () => Promise.resolve());
     rejectStubForTileTasks = jest.spyOn(queueClient.queueHandlerForTileSplittingTasks, 'reject').mockImplementation(async () => Promise.resolve());
     notifyTaskEndedStub = jest.spyOn(overseerClient, 'notifyTaskEnded').mockResolvedValue(undefined);
   });
@@ -82,7 +84,7 @@ describe('syncManager', () => {
         return Promise.resolve();
       });
 
-      updateProgressTileTasks.mockResolvedValue(undefined)
+      updateProgressTileTasks.mockResolvedValue(undefined);
 
       // expectation;
       await expect(tileSplitterManager.handleSplitTilesTask()).resolves.not.toThrow();
