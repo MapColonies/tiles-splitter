@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/MapColonies/tiles-splitter/compare/v1.3.0...v1.3.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* validate completed task will include 100 percentage value ([#26](https://github.com/MapColonies/tiles-splitter/issues/26)) ([d5228ad](https://github.com/MapColonies/tiles-splitter/commit/d5228ad72c0795e05ee62ab5fdd44c2a6d62dee6))
+
 ## 1.3.0 (2022-09-08)
 
 
