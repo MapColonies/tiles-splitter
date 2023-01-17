@@ -66,6 +66,7 @@ spec:
           {{- if ne $cloudProviderFlavor "minikube" }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
           {{- else }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           image: {{ .repository }}:{{ .tag }}
           {{- end }}
           {{- end }}

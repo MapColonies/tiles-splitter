@@ -1,11 +1,12 @@
 import { inject, singleton } from 'tsyringe';
-import { HttpClient, ILogger } from '@map-colonies/mc-utils';
+import { Logger } from '@map-colonies/js-logger';
+import { HttpClient } from '@map-colonies/mc-utils';
 import { SERVICES } from '../common/constants';
 import { IConfig } from '../common/interfaces';
 
 @singleton()
 export class OverseerClient extends HttpClient {
-  public constructor(@inject(SERVICES.LOGGER) logger: ILogger, @inject(SERVICES.CONFIG) config: IConfig) {
+  public constructor(@inject(SERVICES.LOGGER) logger: Logger, @inject(SERVICES.CONFIG) config: IConfig) {
     super(logger, config.get('overseerUrl'), 'DiscreteOverseer', config.get('httpRetry'));
   }
 
