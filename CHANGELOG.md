@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/MapColonies/tiles-splitter/compare/v1.3.2...v1.3.3) (2023-03-13)
+
+
+### Bug Fixes
+
+* imagePullPolicy ([cf6402c](https://github.com/MapColonies/tiles-splitter/commit/cf6402cbf8ae7bbd7558b4027c56d85d02917a72))
+* job complete api ([#28](https://github.com/MapColonies/tiles-splitter/issues/28)) ([c471c80](https://github.com/MapColonies/tiles-splitter/commit/c471c8020a2baa09a173b924f7ddbe63813cad40))
+
 ### [1.3.2](https://github.com/MapColonies/tiles-splitter/compare/v1.3.1...v1.3.2) (2023-01-17)
 
 ### [1.3.1](https://github.com/MapColonies/tiles-splitter/compare/v1.3.0...v1.3.1) (2023-01-11)
