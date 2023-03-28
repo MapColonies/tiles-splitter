@@ -8,7 +8,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $releaseName }}-{{ $chartName }}
+  name: {{ $releaseName }}-deployment
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}
@@ -61,7 +61,7 @@ spec:
           claimName: {{ .Values.rasterCommon.storage.fs.internalPvc.name }}
     {{- end }}
       containers:
-        - name: {{ $releaseName }}-{{ $chartName }}-deployment
+        - name: {{ $releaseName }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           {{- with .Values.image }}
           {{- if ne $cloudProviderFlavor "minikube" }}
@@ -87,7 +87,7 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ $releaseName }}-{{ $chartName }}-configmap
+                name: {{ $releaseName }}-configmap
           ports:
             - name: http
               containerPort: {{ .Values.env.targetPort }}
