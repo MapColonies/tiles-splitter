@@ -11,7 +11,6 @@ export const SERVICES: Record<string, symbol> = {
   LOGGER: Symbol('Logger'),
   CONFIG: Symbol('Config'),
   TRACER: Symbol('Tracer'),
-  METER: Symbol('Meter'),
   QUEUE_CONFIG: Symbol('IQueueconfig'),
   TILES_CONFIG: Symbol('ITilesConfig'),
   VRT_CONFIG: Symbol('IVrtConfig'),

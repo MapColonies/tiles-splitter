@@ -1,5 +1,5 @@
 //requests mocks
-const getMock = jest.fn();
+const getMock = jest.fn().mockResolvedValue({ data: undefined });
 const postMock = jest.fn();
 const putMock = jest.fn();
 const patchMock = jest.fn();
