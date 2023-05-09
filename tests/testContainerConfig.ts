@@ -26,7 +26,6 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
     { token: SERVICES.QUEUE_CONFIG, provider: { useValue: queueConfig } },
     { token: SERVICES.TILES_CONFIG, provider: { useValue: tilesConfig } },
     { token: SERVICES.TRACER, provider: { useValue: tracer } },
-    { token: SERVICES.METER, provider: { useValue: jest.fn() } },
     {
       token: 'onSignal',
       provider: {

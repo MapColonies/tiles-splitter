@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import { OpenapiViewerRouter, OpenapiRouterConfig } from '@map-colonies/openapi-express-viewer';
 import { getErrorHandlerMiddleware } from '@map-colonies/error-express-handler';
 import { middleware as OpenApiMiddleware } from 'express-openapi-validator';
 import { inject, injectable } from 'tsyringe';
@@ -23,12 +22,6 @@ export class ServerBuilder {
     this.registerPostRoutesMiddleware();
 
     return this.serverInstance;
-  }
-
-  private buildDocsRoutes(): void {
-    const openapiRouter = new OpenapiViewerRouter(this.config.get<OpenapiRouterConfig>('openapiConfig'));
-    openapiRouter.setup();
-    this.serverInstance.use(this.config.get<string>('openapiConfig.basePath'), openapiRouter.getRouter());
   }
 
   private registerPreRoutesMiddleware(): void {

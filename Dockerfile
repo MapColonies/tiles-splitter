@@ -1,4 +1,4 @@
-FROM node:14.18.2 as build
+FROM node:16.14.2 as build
 
 WORKDIR /tmp/buildApp
 
@@ -27,7 +27,7 @@ RUN apk update -q --no-cache \
     findutils wget util-linux grep libxml2-dev libxslt-dev
 
 
-ARG VERSION=v14.18.2
+ARG VERSION=v16.14.2
 ARG DISTRO=linux-x64
 RUN wget "https://unofficial-builds.nodejs.org/download/release/$VERSION/node-$VERSION-$DISTRO-musl.tar.xz"
 RUN tar -xJf node-$VERSION-$DISTRO-musl.tar.xz  -C /usr/local --strip-components=1 --no-same-owner \

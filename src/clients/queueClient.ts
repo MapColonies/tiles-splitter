@@ -18,7 +18,6 @@ export class QueueClient {
     this.queueHandlerForTileSplittingTasks = new QueueHandler(
       logger,
       this.queueConfig.jobType,
-      this.queueConfig.tilesTaskType,
       this.queueConfig.jobManagerBaseUrl,
       this.queueConfig.heartbeatManagerBaseUrl,
       this.queueConfig.dequeueIntervalMs,
@@ -27,7 +26,6 @@ export class QueueClient {
     this.jobsClient = new JobManagerClient(
       logger,
       this.queueConfig.jobType,
-      this.queueConfig.tilesTaskType,
       this.queueConfig.jobManagerBaseUrl,
       config.get<IHttpRetryConfig>('httpRetry')
     );

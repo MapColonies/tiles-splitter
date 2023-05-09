@@ -12,6 +12,7 @@ import { OverseerClient } from './clients/overseerClient';
 export class TileSplitterManager {
   private readonly splitAttempts: number;
   private readonly storageProvider: string;
+  private readonly taskType: string;
 
   public constructor(
     @inject(SERVICES.LOGGER) private readonly logger: Logger,
@@ -25,13 +26,16 @@ export class TileSplitterManager {
   ) {
     this.splitAttempts = this.config.get<number>('splitAttempts');
     this.storageProvider = this.config.get<string>('storageProvider');
+    this.taskType = this.config.get<string>('queue.tilesTaskType');
   }
 
   public async handleSplitTilesTask(): Promise<boolean> {
-    const tilesTask = await this.queueClient.queueHandlerForTileSplittingTasks.dequeue<ITaskParams>();
+    const tilesTask = await this.queueClient.queueHandlerForTileSplittingTasks.dequeue<ITaskParams>(this.taskType);
     if (tilesTask) {
-      const job = await this.queueClient.jobsClient.getJob<IJobParams, ITaskParams>(tilesTask.jobId as string);
+      const job = await this.queueClient.jobsClient.getJob<IJobParams, ITaskParams>(tilesTask.jobId);
+
       const gdalUtilities = new GDALUtilities(this.logger, this.vrtConfig, this.generateTilesConfig, this.queueClient, tilesTask);
+      // eslint-disable-next-line   @typescript-eslint/no-unnecessary-type-assertion
       const jobId = tilesTask.jobId as string;
       const taskId = tilesTask.id;
       const attempts = tilesTask.attempts;
@@ -43,8 +47,8 @@ export class TileSplitterManager {
       if (attempts <= this.splitAttempts) {
         try {
           this.logger.info(`Running split tiles task for taskId: ${taskId}, on jobId=${jobId}, attempt: ${attempts}`);
-
-          await gdalUtilities.buildVrt(tilesTask, job?.parameters.fileNames as string[]);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          await gdalUtilities.buildVrt(tilesTask, job?.parameters.fileNames);
           await gdalUtilities.generateTiles(tilesTask, baseTilesPath);
           await this.queueClient.queueHandlerForTileSplittingTasks.ack(jobId, taskId);
           await this.overseerClient.notifyTaskEnded(jobId, taskId);

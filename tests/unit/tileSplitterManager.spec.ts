@@ -9,6 +9,7 @@ import { registerExternalValues } from '../testContainerConfig';
 import { IGenerateTilesConfig, IS3Config, ITilesConfig, IVrtConfig } from '../../src/common/interfaces';
 import { GDALUtilities } from '../../src/gdalUtilities';
 import { OverseerClient } from '../../src/clients/overseerClient';
+import { initAxiosMock } from '../mocks/axiosMock';
 
 let tileSplitterManager: TileSplitterManager;
 let dequeueStub: jest.SpyInstance;
@@ -28,6 +29,7 @@ let overseerClient: OverseerClient;
 describe('syncManager', () => {
   beforeEach(() => {
     initConfig();
+    initAxiosMock();
 
     container = registerExternalValues({ useChild: true });
     queueClient = container.resolve(QueueClient);
@@ -64,8 +66,7 @@ describe('syncManager', () => {
     clearConfig();
     container.reset();
     container.clearInstances();
-    jest.resetAllMocks();
-    jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('# tile splitter manager', () => {

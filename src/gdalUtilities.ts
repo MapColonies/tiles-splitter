@@ -25,7 +25,7 @@ export class GDALUtilities {
     private readonly queueClient: QueueClient,
     private readonly task: ITaskResponse<ITaskParams>
   ) {
-    this.jobId = this.task.jobId as string;
+    this.jobId = this.task.jobId;
     this.taskId = this.task.id;
   }
 
