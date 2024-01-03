@@ -3,35 +3,59 @@ global:
   tracing: {}
   metrics: {}
   environment: {}
-
-rasterCommon:
   useNodeAffinity: false
   serviceUrls: 
-    jobManager: http://localhost:8082
-    heartbeatManager: http://localhost:8085
-    discreteOverseer: http://localhost:8080
-  
+    jobManager: ""
+    heartbeatManager: ""
+    discreteOverseer: ""
   storage:
-    tilesStorageProvider: 'FS'
+    tilesStorageProvider: ""
     fs:
       ingestionSourcePvc:
-        name: ingestion-source-pvc
-        subPath: ingestion-source
+        name: ""
+        subPath: ""
       internalPvc:
-        name: "internal-pvc"
-        tilesSubPath: tiles
+        name: ""
+        tilesSubPath: ""
     s3:
-      endpointUrl: "http://localhost:9000"
-      tilesBucket: "mapping-images"
-      forcePathStyle: true
+      endpointUrl: ""
+      tilesBucket: ""
+      forcePathStyle: false
       sslEnabled: false
       virtualHosting: false
-      secretName: raster-tiles-s3-secret
+      secretName: ""
   jobManagement:
     ingestion:
       new: 
-        jobType: Ingestion_New
-        splitTilesTaskType: tilesSplitting
+        jobType: ""
+        splitTilesTaskType: ""
+
+serviceUrls: 
+  jobManager: ""
+  heartbeatManager: ""
+  discreteOverseer: ""
+
+storage:
+  tilesStorageProvider: ''
+  fs:
+    ingestionSourcePvc:
+      name: ""
+      subPath: ""
+    internalPvc:
+      name: ""
+      tilesSubPath: ""
+  s3:
+    endpointUrl: ""
+    tilesBucket: ""
+    forcePathStyle: false
+    sslEnabled: false
+    virtualHosting: false
+    secretName: ""
+jobManagement:
+  ingestion:
+    new: 
+      jobType: ""
+      splitTilesTaskType: ""
 
 enabled: true
 environment: "development"
@@ -46,29 +70,9 @@ cloudProvider:
   imagePullSecretName: 'my-registry-secret'
   flavor: openshift
 
-caSecretName: ''
-caKey: 'ca.crt'
-
 image:
   repository: "tiles-splitter"
   tag: "latest"
-
-storage:
-  ingestionSourcePvc:
-    enabled: true
-  internalPvc:
-    create: false #for local deployment only
-  internalPv:
-    name: local-tiles-pv
-    directory: '/tiles' #tiles hostPatch
-
-
-S3:
-  secret:
-    createSecret: false # secret should be created on higher level for deployments with multiple services
-    accessKeyId: # used only when creating secret
-    secretAccessKey: # used only when creating secret
-
 
 env:
   port: 8080
@@ -111,3 +115,8 @@ resources:
       cpu: "100m"
       memory: "128Mi"
 
+S3:
+  secret:
+    createSecret: false # secret should be created on higher level for deployments with multiple services
+    accessKeyId: # used only when creating secret
+    secretAccessKey: # used only when creating secret

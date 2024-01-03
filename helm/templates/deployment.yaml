@@ -4,11 +4,16 @@
 {{- $cloudProviderDockerRegistryUrl := include "tiles-splitter.cloudProviderDockerRegistryUrl" . -}}
 {{- $cloudProviderImagePullSecretName := include "tiles-splitter.cloudProviderImagePullSecretName" . -}}
 {{- $imageTag := include "tiles-splitter.tag" . -}}
+{{- $storage := (include "common.storage.merged" .) | fromYaml }}
+{{- $deploymentName := include "deployment.fullname" . }}
+{{- $configmapName := include "configmap.fullname" . }}
+{{- $s3 := (include "common.s3.merged" .) | fromYaml }}
+{{- $fs := (include "common.fs.merged" .) | fromYaml }}
 {{- if .Values.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $releaseName }}-deployment
+  name: {{ $deploymentName }}
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}
@@ -35,7 +40,7 @@ spec:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- end }}
     spec:
-      {{- if .Values.rasterCommon.useNodeAffinity }}
+      {{- if .Values.global.useNodeAffinity }}
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -54,11 +59,11 @@ spec:
       volumes:
       - name: ingestion-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.rasterCommon.storage.fs.ingestionSourcePvc.name }}
-    {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
+          claimName: {{ $fs.ingestionSourcePvc.name }}
+    {{- if eq (upper $storage.tilesStorageProvider) "FS" }}
       - name: tiles-storage
         persistentVolumeClaim:
-          claimName: {{ .Values.rasterCommon.storage.fs.internalPvc.name }}
+          claimName: {{ $fs.internalPvc.name }}
     {{- end }}
       containers:
         - name: {{ $releaseName }}
@@ -73,21 +78,21 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
-            {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "S3" }}
+            {{- if eq (upper $storage.tilesStorageProvider) "S3" }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.rasterCommon.storage.s3.secretName }}
+                  name: {{ $s3.secretName }}
                   key: accessKeyId
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.rasterCommon.storage.s3.secretName }}
+                  name: {{ $s3.secretName }}
                   key: secretAccessKey
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ $releaseName }}-configmap
+                name: {{ $configmapName }}
           ports:
             - name: http
               containerPort: {{ .Values.env.targetPort }}
@@ -100,13 +105,13 @@ spec:
           volumeMounts:
             - name: ingestion-storage
               mountPath: /layerSources
-              {{- if .Values.rasterCommon.storage.fs.ingestionSourcePvc.subPath }}
-              subPath: {{ .Values.rasterCommon.storage.fs.ingestionSourcePvc.subPath }}
+              {{- if $fs.ingestionSourcePvc.subPath }}
+              subPath: {{ $fs.ingestionSourcePvc.subPath }}
               {{- end }}
-            {{- if eq (upper .Values.rasterCommon.storage.tilesStorageProvider) "FS" }}
+            {{- if eq (upper $storage.tilesStorageProvider) "FS" }}
             - name: tiles-storage
               mountPath: /app/tiles_outputs
-              subPath: {{ .Values.rasterCommon.storage.fs.internalPvc.tilesSubPath }}
+              subPath: {{ $fs.internalPvc.tilesSubPath }}
             {{- end }}
           {{- if .Values.resources.enabled }}
           resources:
